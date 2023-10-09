@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>It's Monday</title>
+    <link rel="stylesheet" href="clundi.css">
+</head>
+<body>
+<header>
+    <h1>Welcome to It's Monday</h1>
+    <p>Share your Monday experiences with the world!</p>
+</header>
+
+<nav>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Stories</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</nav>
+
+<main>
+    <section id="submit-story">
+        <h2>Share Your Monday Story</h2>
+        <form action="#" method="POST">
+            <label for="author">Author Name:</label>
+            <input type="text" id="author" name="author" required>
+
+            <label for="story">Your Story:</label>
+            <textarea id="story" name="story" rows="4" required></textarea>
+
+            <button type="submit" id="submit-button">Submit</button>
+        </form>
+    </section>
+
+    <section id="stories">
+        <h2>Monday Stories</h2>
+        <!-- Display stories from the database here -->
+        <div class="story">
+            <h3>Author Name</h3>
+            <p>This is a Monday story...</p>
+        </div>
+        <!-- Repeat the structure for more stories -->
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 It's Monday</p>
+</footer>
+
+<script type="text/javascript">
+    // TypeScript code here
+</script>
+</body>
+</html>
