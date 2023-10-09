@@ -81,6 +81,36 @@ async function loadStories() {
         console.error("Network error:", error);
     }
 }
+// client.js
+
+// Function to fetch and display stories
+function fetchStories() {
+    fetch('/api/get-stories')
+        .then((response) => response.json())
+        .then((data) => {
+            const storiesSection = document.getElementById('stories');
+            storiesSection.innerHTML = '<h2>Monday Stories</h2>';
+
+            data.forEach((story) => {
+                const storyDiv = document.createElement('div');
+                storyDiv.classList.add('story');
+                storyDiv.innerHTML = `
+                    <h3>${story.author}</h3>
+                    <p>${story.content}</p>
+                `;
+                storiesSection.appendChild(storyDiv);
+            });
+        })
+        .catch((error) => {
+            console.error('Error fetching stories:', error);
+        });
+}
+
+// Call the fetchStories function to load stories when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    fetchStories();
+});
+
 
 // Call the loadStories function to load stories when the page loads
 loadStories();

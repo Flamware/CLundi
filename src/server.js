@@ -6,6 +6,9 @@ const port = 3000; // Change this to the desired port
 // Middleware for parsing JSON requests
 app.use(bodyParser.json());
 
+// Serve static files from the "public" directory
+app.use(express.static('public'));
+
 // Temporary storage for stories (in-memory array)
 const stories = [];
 
@@ -36,3 +39,4 @@ app.get('/api/get-stories', (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+

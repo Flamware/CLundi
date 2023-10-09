@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>It's Monday - Share Your Experience</title>
+    <link rel="stylesheet" href="clundi.css"> <!-- Link to your CSS stylesheet -->
+    <script src="server.js"></script> <!-- Relative path to your JavaScript file -->
+
+
+    <!-- Add any additional CSS or JavaScript links here -->
+</head>
+<body>
+<header>
+    <div class="header-logo">
+        <a class="header-logo-picture" href="/" style="background-image: url('../img/logo_no_text.png')">
+            &nbsp;
+        </a>
+        <a class="header-logo-text" href="/public">
+            <span>It's Monday</span>
+            <span>Share Your Monday Experiences</span>
+        </a>
+    </div>
+
+    <!-- Add any header content or navigation links here -->
+</header>
+
+<main>
+    <section id="submit-story">
+        <h2>Share Your Monday Story</h2>
+        <form action="/api/submit-story" method="POST">
+            <label for="author">Author Name:</label>
+            <input type="text" id="author" name="author" required>
+
+            <label for="story">Your Story:</label>
+            <textarea id="story" name="story" rows="4" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </section>
+
+    <section id="stories">
+        <h2>Monday Stories</h2>
+        <!-- Display stories from the server here -->
+        <div class="story">
+            <h3>Author Name</h3>
+            <p>This is a Monday story...</p>
+        </div>
+        <!-- Repeat this structure for more stories -->
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 It's Monday</p>
+</footer>
+<script src="client.js"></script>
+</body>
+</html>
