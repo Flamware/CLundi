@@ -1,13 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const path = require('path');
 const app = express();
-const port = 3000; // Change this to the desired port
+const port = 8080;
 
-// Middleware for parsing JSON requests
 app.use(bodyParser.json());
 
 // Serve static files from the "public" directory
-app.use(express.static('public'));
+const publicPath = path.join(__dirname, '');
+app.use(express.static(publicPath));
 
 // Temporary storage for stories (in-memory array)
 const stories = [];
@@ -16,15 +17,12 @@ const stories = [];
 app.post('/api/submit-story', (req, res) => {
     const { author, content } = req.body;
 
-    // Basic validation: Check if author and content are provided
     if (!author || !content) {
+        console.log(author, content);
         return res.status(400).json({ error: 'Author and content are required.' });
     }
 
-    // Create a new story object
     const newStory = { author, content };
-
-    // Add the new story to the array
     stories.push(newStory);
 
     res.status(201).json(newStory);
@@ -35,8 +33,11 @@ app.get('/api/get-stories', (req, res) => {
     res.json(stories);
 });
 
-// Start the server
+// Endpoint to serve the main.html page
+app.get('/', (req, res) => {
+    res.sendFile(path.join(publicPath, 'main.html'));
+});
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-
