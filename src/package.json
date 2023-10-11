@@ -1,7 +1,13 @@
 {
-  "name": "src",
+  "name": "CLundi",
   "version": "1.0.0",
+  "description": "ralez, c'est gratuit :)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node /home/axel/my-node-apps/CLundi/src/public/server.js"
+  },
   "dependencies": {
-    "mysql2": "^x.x.x"
+    "express": "^4.17.1",
+    "mysql2": "^2.3.1"
   }
 }

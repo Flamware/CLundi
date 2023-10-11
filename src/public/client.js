@@ -57,8 +57,11 @@ function displayStory(story) {
 }
 
 // Event listener for the form submission
+// Event listener for the form submission
 submitButton = document.getElementById("submit-button");
 document.addEventListener("DOMContentLoaded", function () {
+    // Load stories when the page loads
+    loadStories();
     // Your code here
     submitButton = document.getElementById("submit-button");
     submitButton.addEventListener("click", function (event) {
@@ -66,6 +69,7 @@ document.addEventListener("DOMContentLoaded", function () {
         submitStory();
     });
 });
+
 
 // Initial page load: Retrieve and display existing stories (if any)
 async function loadStories() {
