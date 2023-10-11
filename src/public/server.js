@@ -24,7 +24,6 @@ app.post('/api/submit-story', (req, res) => {
 
     const newStory = { author, content };
     stories.push(newStory);
-
     res.status(201).json(newStory);
 });
 

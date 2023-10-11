@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>It's Monday - Share Your Experience</title>
     <link rel="stylesheet" href="clundi.css"> <!-- Link to your CSS stylesheet -->
-    <script src="client.js"></script> <!-- Relative path to your JavaScript file -->
     <!-- Add any additional CSS or JavaScript links here -->
 </head>
 <body>
@@ -33,11 +33,11 @@
             <label for="story">Your Story:</label>
             <textarea id="story" name="story" rows="4" required></textarea>
 
-            <button type="submit">Submit</button>
+            <button type="submit" id="submit-button">Submit</button>
         </form>
     </section>
 
-    <section id="stories">
+    <section id="stories-container">
         <h2>Monday Stories</h2>
         <!-- Display stories from the server here -->
         <div class="story">
@@ -51,5 +51,8 @@
 <footer>
     <p>&copy; 2023 It's Monday</p>
 </footer>
+<script src="client.js"></script>
+<script>console.log("client.js loaded")</script>
 </body>
+
 </html>

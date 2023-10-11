@@ -1,4 +1,5 @@
 // Function to submit a new story
+console.log("client.js");
 async function submitStory() {
     // Get the author and story content from the form
     const authorInput = document.getElementById("author");
@@ -10,7 +11,7 @@ async function submitStory() {
 
     // Create a new story object
     const newStory = { author, content };
-
+    console.log(newStory);
     try {
         // Send a POST request to the server to submit the story
         const response = await fetch("/api/submit-story", {
@@ -25,7 +26,7 @@ async function submitStory() {
             // Story submission was successful
             const jsonResponse = await response.json();
             // Add the new story to the page
-            displayStory(jsonResponse);
+            displayStory(newStory);
             // Clear the form inputs
             authorInput.value = "";
             storyInput.value = "";
@@ -42,6 +43,7 @@ async function submitStory() {
 function displayStory(story) {
     const storiesContainer = document.getElementById("stories-container");
 
+
     // Create a new story element
     const storyElement = document.createElement("div");
     storyElement.classList.add("story");
@@ -55,10 +57,14 @@ function displayStory(story) {
 }
 
 // Event listener for the form submission
-const submitButton = document.getElementById("submit-button");
-submitButton.addEventListener("click", function (event) {
-    event.preventDefault();
-    submitStory();
+submitButton = document.getElementById("submit-button");
+document.addEventListener("DOMContentLoaded", function () {
+    // Your code here
+    submitButton = document.getElementById("submit-button");
+    submitButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        submitStory();
+    });
 });
 
 // Initial page load: Retrieve and display existing stories (if any)
@@ -78,5 +84,4 @@ async function loadStories() {
     }
 }
 
-// Call the loadStories function to load stories when the page loads
-loadStories();
+
