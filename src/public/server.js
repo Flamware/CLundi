@@ -37,6 +37,9 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(publicPath, 'main.html'));
 });
 
+
+
+// Start the Express server
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });

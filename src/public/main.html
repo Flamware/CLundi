@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>It's Monday - Share Your Experience</title>
-    <link rel="stylesheet" href="clundi.css"> <!-- Link to your CSS stylesheet -->
-    <!-- Add any additional CSS or JavaScript links here -->
+    <title>C'est lundi, c'est nul</title>
+    <link rel="stylesheet" href="clundi.css"> <!-- Lien vers votre feuille de style CSS -->
+    <!-- Ajoutez d'autres liens CSS ou JavaScript supplémentaires ici -->
 </head>
 <body>
 <header>
@@ -14,45 +14,45 @@
         <a class="header-logo-picture" href="/" style="background-image: url('../img/logo_no_text.png')">
             &nbsp;
         </a>
-        <a class="header-logo-text" href="/public">
-            <span>It's Monday</span>
-            <span>Share Your Monday Experiences</span>
+        <a class= "header-logo-text" href="/public">
+        <span>C'est lundi</span>
+        <span>C'est nul</span>
         </a>
     </div>
 
-    <!-- Add any header content or navigation links here -->
+    <!-- Ajoutez tout contenu d'en-tête ou des liens de navigation supplémentaires ici -->
 </header>
 
 <main>
     <section id="submit-story">
-        <h2>Share Your Monday Story</h2>
+        <h2>Ici, vous pourrez évacuer la frustration que vous ressentez en ce début de semaine et/ou partagez votre week-end.</h2>
         <form action="/api/submit-story" method="POST">
-            <label for="author">Author Name:</label>
+            <label for="author">Votre nom/surnom :</label>
             <input type="text" id="author" name="author" required>
 
-            <label for="story">Your Story:</label>
+            <label for="story">Dites nous tout :</label>
             <textarea id="story" name="story" rows="4" required></textarea>
 
-            <button type="submit" id="submit-button">Submit</button>
+            <button type="submit" id="submit-button">Partager</button>
         </form>
     </section>
 
     <section id="stories-container">
-        <h2>Monday Stories</h2>
-        <!-- Display stories from the server here -->
+        <h2>Ci-dessous, vos histoires.</h2>
+        <!-- Affichez les récits depuis le serveur ici -->
         <div class="story">
-            <h3>Author Name</h3>
-            <p>This is a Monday story...</p>
+            <h3>Nom de l'auteur</h3>
+            <p>Voici un exemple de texte qu'aurais ecris une personne</p>
         </div>
-        <!-- Repeat this structure for more stories -->
+        <!-- Répétez cette structure pour plus de récits -->
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2023 It's Monday</p>
+    <p>&copy; 2023 Clundi, Karaï (Antunes Axel)</p>
 </footer>
 <script src="client.js"></script>
-<script>console.log("client.js loaded")</script>
+<script>console.log("client.js chargé")</script>
 </body>
 
 </html>
