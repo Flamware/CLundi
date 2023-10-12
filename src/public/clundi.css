@@ -6,17 +6,18 @@ body, h1, h2, h3, p, ul, li {
 
 /* Set a background color and text color */
 body {
-    background-color: #f0f0f0;
+    background-color: #f5f5f5; /* Light gray background color */
     color: #333;
     font-family: Arial, sans-serif;
 }
 
 /* Style the header section */
 header {
-    background-color: #3498db;
+    background-color: #3498db; /* Blue header background */
     color: #fff;
     text-align: center;
     padding: 20px;
+    border-radius: 0 0 10px 10px; /* Rounded bottom corners */
 }
 
 header h1 {
@@ -56,7 +57,7 @@ main {
     padding: 20px;
     background-color: #fff;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 10px; /* Rounded corners for the main content */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -82,7 +83,7 @@ main h2 {
 }
 
 #submit-story button {
-    background-color: #3498db;
+    background-color: #e74c3c; /* Red button background */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -91,7 +92,7 @@ main h2 {
 }
 
 #submit-story button:hover {
-    background-color: #2980b9;
+    background-color: #c0392b; /* Darker red on hover */
 }
 
 /* Style the story display section */
@@ -99,8 +100,8 @@ main h2 {
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
-    border-radius: 5px;
-    background-color: #fff;
+    border-radius: 10px; /* Rounded corners for story sections */
+    background-color: #ecf0f1; /* Light gray background */
 }
 
 #stories h3 {
@@ -116,9 +117,5 @@ footer {
     color: #fff;
 }
 
-/* Responsive design for smaller screens */
-@media screen and (max-width: 768px) {
-    main {
-        padding: 10px;
-    }
-}
+/* Responsive design for smaller
+    devices (tablets and phones) */

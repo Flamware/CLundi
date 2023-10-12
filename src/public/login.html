@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="clundi.css"> <!-- Link to your CSS file -->
+</head>
+<body>
+<header>
+    <div class="header-logo">
+        <a class="header-logo-picture" href="/" style="background-image: url('../img/logo_no_text.png')">
+            &nbsp;
+        </a>
+        <a class="header-logo-text" href="/public">
+            <span>C'est lundi</span>
+            <span>C'est nul</span>
+        </a>
+    </div>
+</header>
+
+<main>
+    <section id="login-form">
+        <h2>Login</h2>
+        <form action="/api/login" method="POST">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit" id="login-button">Log In</button>
+        </form>
+
+        <!-- "Sign Up" button -->
+        <form action="/api/register"method="GET">
+            <button type="submit" id="sign-up-button">Sign Up</button>
+        </form>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2023 Clundi, Karaï (Antunes Axel)</p>
+</footer>
+<script src="client.js"></script>
+<script>console.log("client.js loaded")</script>
+</body>
+</html>
