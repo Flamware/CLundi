@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Créer un Compte</title>
-    <link rel="stylesheet" href="clundi.css"> <!-- Lien vers votre fichier CSS -->
+    <link rel="stylesheet" href="register.css"> <!-- Lien vers votre fichier CSS -->
 </head>
 <body>
 <header>
@@ -25,13 +25,11 @@
         <form action="/api/register" method="POST">
             <label for="username">Nom d'utilisateur :</label>
             <input type="text" id="username" name="username" required>
-
             <label for="password">Mot de passe :</label>
             <input type="password" id="password" name="password" required>
-
+            <!-- Remove one of the duplicate <label> elements -->
             <label for="confirm-password">Confirmez le Mot de passe :</label>
             <input type="password" id="confirm-password" name="confirm-password" required>
-
             <button type="submit" id="create-account-button">Créer un Compte</button>
         </form>
     </section>
@@ -40,7 +38,7 @@
 <footer>
     <p>&copy; 2023 Clundi, Karaï (Antunes Axel)</p>
 </footer>
-<script src="register.js"></script>
+<script src="/register.js" ></script>
 <script>console.log("register.js chargé")</script>
 </body>
 </html>

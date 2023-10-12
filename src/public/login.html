@@ -28,12 +28,10 @@
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
-
             <button type="submit" id="login-button">Log In</button>
+            <div id="error-message" style="color: red;"></div>
         </form>
-
-        <!-- "Sign Up" button -->
-        <form action="/api/register"method="GET">
+        <form action="/api/register" method="GET">
             <button type="submit" id="sign-up-button">Sign Up</button>
         </form>
     </section>
@@ -42,7 +40,7 @@
 <footer>
     <p>&copy; 2023 Clundi, Karaï (Antunes Axel)</p>
 </footer>
-<script src="client.js"></script>
+<script src="/login.js"></script>
 <script>console.log("client.js loaded")</script>
 </body>
 </html>
