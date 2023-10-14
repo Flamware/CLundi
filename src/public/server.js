@@ -3,14 +3,35 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const app = express();
 const port = 8080;
-const mysql = require('mysql2/promise'); // Import the MySQL library
+const mysql = require('mysql2/promise');
 const session = require('express-session');
+var https = require('https');
+var fs = require('fs');
+var https_options = {
+    key: fs.readFileSync("C:\\Users\\axela\\IdeaProjects\\CLundi\\src\\certificate/private.key"),
+    cert: fs.readFileSync("C:\\Users\\axela\\IdeaProjects\\CLundi\\src\\certificate/certificate.cer"),
+    ca: [
+        fs.readFileSync("C:\\Users\\axela\\IdeaProjects\\CLundi\\src\\certificate/private.key"),
+        fs.readFileSync("C:\\Users\\axela\\IdeaProjects\\CLundi\\src\\certificate/certificate.cer"),
+    ] };
+const server = https.createServer(https_options, app); // Create an HTTPS server
 
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
 }));
+
+// Other middleware and routes...
+
+// Start the Express server
+server.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+// Initialize the database tables when the server starts
+initializeDatabase();
+
 
 // Middleware to parse JSON data
 app.use(express.json());
@@ -147,5 +168,3 @@ async function initializeDatabase() {
     }
 }
 
-// Initialize the database tables when the server starts
-initializeDatabase();

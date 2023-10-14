@@ -1,0 +1,7 @@
+actions:
+  - action: "Push to registry"
+    type: "DOCKER_PUSH"
+    region: "us-east-1"
+    integration_hash: "5ddb7c180fb38be67bd78a88a"
+    docker_image_tag: "14.06"
+    repository: "MyDockerRepo/MyDockerImage"
