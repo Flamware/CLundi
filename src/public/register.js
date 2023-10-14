@@ -3,13 +3,11 @@ async function register() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
-
-    const baseURL = "http://localhost:8080"; // Remove the space before the URL
     console.log(username + password + confirmPassword);
 
     try {
         // Send a POST request to the server
-        const response = await fetch(baseURL + '/api/register', {
+        const response = await fetch( '/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -21,7 +19,7 @@ async function register() {
         if (response.ok) {
             if (data.redirect) {
                 // Redirect to the specified URL (login page)
-                window.location.href = baseURL + data.redirect;
+                window.location.href =  data.redirect;
             } else if (data.error) {
                 // Display the error message
                 document.getElementById("error-message").innerText = data.error;

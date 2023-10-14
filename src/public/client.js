@@ -2,11 +2,8 @@ async function register() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     const confirmPassword = document.getElementById("confirm-password").value;
-
-    const baseURL = "http://localhost:8080";
-
     try {
-        const response = await fetch(baseURL + '/api/register', {
+        const response = await fetch( '/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
