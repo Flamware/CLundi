@@ -2,7 +2,6 @@ async function login() {
     // Get the values from the form
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    const baseURL = "http://localhost:8080";
 
     if (!username) {
         const errorMessageElement = document.getElementById("error-message");
@@ -12,7 +11,7 @@ async function login() {
 
     try {
         // Send a POST request to the server
-        const response = await fetch(baseURL + '/api/login', {
+        const response = await fetch( '/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -44,8 +43,7 @@ async function login() {
 
 async function register() {
     // Send a GET request to the server to navigate to the registration page
-    const baseURL = "http://localhost:8080";
-    window.location.href = baseURL + '/api/register';
+    window.location.href = '/register';
 }
 
 document.addEventListener('DOMContentLoaded', function () {
