@@ -2,19 +2,20 @@
 body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
+    box-sizing: border-box; /* Include padding and border in element dimensions */
 }
 
-/* Set a background color and text color */
+/* Set a background color and text color for the body */
 body {
-    background-color: #f5f5f5; /* Light gray background color */
+    background-color: #8D86C9; /* Light gray background color */
     color: #333;
     font-family: Arial, sans-serif;
 }
 
 /* Style the header section */
 header {
-    background-color: #3498db; /* Blue header background */
-    color: #fff;
+    background-color: #242038; /* Blue header background */
+    color: #CAC4CE;
     text-align: center;
     padding: 20px;
     border-radius: 0 0 10px 10px; /* Rounded bottom corners */
@@ -55,7 +56,7 @@ main {
     max-width: 800px;
     margin: 20px auto;
     padding: 20px;
-    background-color: #fff;
+    background-color: #CAC4CE;
     border: 1px solid #ddd;
     border-radius: 10px; /* Rounded corners for the main content */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -66,11 +67,36 @@ main h2 {
     margin-bottom: 20px;
 }
 
+/* Header logo styles */
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo-text {
+    text-align: center;
+    /* Position the text at the center of the header-logo div */
+    flex: 1;
+}
+
+.header-logo-picture img {
+    max-width: 40px; /* Adjust the size as needed */
+    height: auto;
+}
+
 /* Style the story submission form */
 #submit-story-form label {
     display: block;
     font-weight: bold;
     margin-top: 10px;
+}
+
+#story {
+    max-width: 97%; /* Ensure the text area doesn't exceed the container width */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 #submit-story-form input[type="text"],
@@ -80,10 +106,11 @@ main h2 {
     margin-bottom: 20px;
     border: 1px solid #ddd;
     border-radius: 5px;
+    text-align: center;
 }
 
 #submit-button {
-    background-color: #e74c3c; /* Red button background */
+    background-color: #242038; /* Red button background */
     color: #fff;
     padding: 10px 20px;
     border: none;
@@ -92,7 +119,7 @@ main h2 {
 }
 
 #submit-button:hover {
-    background-color: #c0392b; /* Darker red on hover */
+    background-color: #242038; /* Darker red on hover */
 }
 
 /* Style the story display section */
@@ -101,41 +128,38 @@ main h2 {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 10px; /* Rounded corners for story sections */
-    background-color: #ecf0f1; /* Light gray background */
+    background-color: #8D86C9; /* Light gray background */
+    color: #000;
 }
 
-#stories-container h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
+/* Author name bold */
+#stories-container .story .author {
+    font-weight: bold;
+}
+
+.author-name {
+    font-weight: bold;
+}
+
+/* Style for all comment sections */
+.comment {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #725AC1;
+    border-radius: 10px;
+    background-color: #f7ece1;
 }
 
 /* Style the footer */
 footer {
     text-align: center;
-    padding: 10px;
-    background-color: #333;
-    color: #fff;
-    width: 100%;
-}
-/* Add this style to position the "Logout" button */
-.header-logout {
-    position: absolute;
-    top: 10px; /* Adjust the top position as needed */
-    right: 10px; /* Adjust the right position as needed */
-}
-.header-logout a {
-    color: #fff;
-    text-decoration: none;
-    font-size: 16px;
-    background-color: #e74c3c; /* Red background color for the button */
-    padding: 5px 10px; /* Adjust padding as needed */
-    border-radius: 5px;
-}
-.header-logout a:hover {
-    background-color: #c0392b; /* Darker red on hover */
-}
+background-color: #242038;
 
-/* Responsive design for small screens */
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+}
 @media (max-width: 768px) {
     main {
         margin: 10px;
