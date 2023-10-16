@@ -67,14 +67,14 @@ main h2 {
 }
 
 /* Style the story submission form */
-#submit-story form label {
+#submit-story-form label {
     display: block;
     font-weight: bold;
     margin-top: 10px;
 }
 
-#submit-story input[type="text"],
-#submit-story textarea {
+#submit-story-form input[type="text"],
+#submit-story-form textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -82,7 +82,7 @@ main h2 {
     border-radius: 5px;
 }
 
-#submit-story button {
+#submit-button {
     background-color: #e74c3c; /* Red button background */
     color: #fff;
     padding: 10px 20px;
@@ -91,12 +91,12 @@ main h2 {
     cursor: pointer;
 }
 
-#submit-story button:hover {
+#submit-button:hover {
     background-color: #c0392b; /* Darker red on hover */
 }
 
 /* Style the story display section */
-#stories .story {
+#stories-container .story {
     margin-bottom: 20px;
     padding: 10px;
     border: 1px solid #ddd;
@@ -104,7 +104,7 @@ main h2 {
     background-color: #ecf0f1; /* Light gray background */
 }
 
-#stories h3 {
+#stories-container h3 {
     font-size: 20px;
     margin-bottom: 10px;
 }
@@ -115,7 +115,29 @@ footer {
     padding: 10px;
     background-color: #333;
     color: #fff;
+    width: 100%;
+}
+/* Add this style to position the "Logout" button */
+.header-logout {
+    position: absolute;
+    top: 10px; /* Adjust the top position as needed */
+    right: 10px; /* Adjust the right position as needed */
+}
+.header-logout a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    background-color: #e74c3c; /* Red background color for the button */
+    padding: 5px 10px; /* Adjust padding as needed */
+    border-radius: 5px;
+}
+.header-logout a:hover {
+    background-color: #c0392b; /* Darker red on hover */
 }
 
-/* Responsive design for smaller
-    devices (tablets and phones) */
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+    }
+}

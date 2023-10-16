@@ -2,12 +2,16 @@
 * {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
 }
 
 /* Set a background color and font for the whole page */
 body {
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Style the header */
@@ -20,21 +24,18 @@ header {
 
 /* Center the logo and text in the header */
 .header-logo {
-    text-align: left;
+    display: flex;
+    align-items: center;
 }
 
-.header-logo-picture {
-    display: inline-block;
-    width: 150px;
-    height: 100px;
-    background-size: cover;
-    margin: 0 30px 0 0; /* Adjust the right margin to create more space */
+.header-logo-picture img {
+    max-width: 150px; /* Adjust the size as needed */
+    height: auto;
+    margin-right: 30px;
 }
 
 .header-logo-text {
-    display: inline-block;
     text-align: left;
-    vertical-align: middle;
 }
 
 .header-logo-text span {
@@ -43,7 +44,10 @@ header {
 
 /* Style the main content area */
 main {
-    max-width: 500px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -96,7 +100,5 @@ footer {
     background-color: #333;
     color: white;
     padding: 10px 0;
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }

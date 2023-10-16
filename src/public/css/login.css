@@ -1,0 +1,123 @@
+/* Reset some default styles to ensure consistency */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Set a background color for the entire page */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5; /* A light gray background */
+}
+
+/* Style the header */
+header {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+}
+
+/* Center the logo and text in the header */
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo-picture {
+    max-width: 150px; /* Adjust the size as needed */
+    height: auto;
+    margin-right: 30px;
+}
+
+.header-logo-text {
+    text-align: left;
+}
+
+.header-logo-text span {
+    display: block;
+}
+
+/* Style the main content */
+main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff; /* White background */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Softer box shadow */
+    border-radius: 5px;
+}
+
+#login-form {
+    text-align: center;
+}
+
+h2 {
+    font-size: 24px;
+    color: #333; /* Dark gray text */
+}
+
+form {
+    margin-top: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px; /* Increased margin for better spacing */
+    text-align: left;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+button {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: #555; /* Slightly darker color on hover */
+}
+
+#error-message {
+    margin-top: 10px;
+}
+
+/* Style the footer */
+footer {
+    text-align: center;
+    background-color: #333;
+    color: white;
+    padding: 10px 0;
+    width: 100%;
+}
+
+/* Responsive design for small screens */
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+    }
+
+    .header-logo {
+        flex-direction: column;
+    }
+
+    .header-logo-picture {
+        margin-bottom: 10px;
+    }
+}
+
+/* Add any additional styles you need */
