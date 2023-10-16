@@ -1,0 +1,167 @@
+/* Reset some default browser styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; /* Include padding and border in element dimensions */
+}
+
+/* Set a background color and text color for the body */
+body {
+    background-color: #8D86C9; /* Light gray background color */
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+/* Style the header section */
+header {
+    background-color: #242038; /* Blue header background */
+    color: #CAC4CE;
+    text-align: center;
+    padding: 20px;
+    border-radius: 0 0 10px 10px; /* Rounded bottom corners */
+}
+
+header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 18px;
+}
+
+/* Style the navigation menu */
+nav {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+}
+
+nav ul {
+    list-style: none;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+/* Style the main content section */
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #CAC4CE;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Rounded corners for the main content */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+main h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Header logo styles */
+.header-logo {
+    display: flex;
+    align-items: center;
+}
+
+.header-logo-text {
+    text-align: center;
+    /* Position the text at the center of the header-logo div */
+    flex: 1;
+}
+
+.header-logo-picture img {
+    max-width: 40px; /* Adjust the size as needed */
+    height: auto;
+}
+
+/* Style the story submission form */
+#submit-story-form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+#story {
+    max-width: 97%; /* Ensure the text area doesn't exceed the container width */
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#submit-story-form input[type="text"],
+#submit-story-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#submit-button {
+    background-color: #242038; /* Red button background */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#submit-button:hover {
+    background-color: #242038; /* Darker red on hover */
+}
+
+/* Style the story display section */
+#stories-container .story {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Rounded corners for story sections */
+    background-color: #8D86C9; /* Light gray background */
+    color: #000;
+}
+
+/* Author name bold */
+#stories-container .story .author {
+    font-weight: bold;
+}
+
+.author-name {
+    font-weight: bold;
+}
+
+/* Style for all comment sections */
+.comment {
+    margin-top: 10px;
+    padding: 10px;
+    border: 1px solid #725AC1;
+    border-radius: 10px;
+    background-color: #f7ece1;
+}
+
+/* Style the footer */
+footer {
+    text-align: center;
+background-color: #242038;
+
+    color: #fff;
+    padding: 10px 0;
+    width: 100%;
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+}
+@media (max-width: 768px) {
+    main {
+        margin: 10px;
+    }
+}
