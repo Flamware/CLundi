@@ -19,8 +19,7 @@ jobs:
       - name: Push Docker image to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker pull flamware/cdocker:latest
-
+          docker push flamware/cdocker:latest
 
       - name: SSH into VPS and update the application
         uses: appleboy/ssh-action@master
@@ -30,9 +29,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Ensure the SSH key is properly configured
-            echo "${{ secrets.SSH_PRIVATE_KEY}}" >> ~/.ssh/authorized_keys
+            echo "${{ secrets.SSH_PUBLIC_KEY }}" >> ~/.ssh/authorized_keys
+            chmod 600 ~/.ssh/authorized_keys
+            
             # Continue with your deployment steps
-            docker pull flamware/cdocker:latest
             docker stop cdocker || true
             docker rm cdocker || true
             docker run -d -p 3000:3000 --name cdocker flamware/cdocker:latest
