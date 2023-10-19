@@ -11,4 +11,5 @@ if ($link->connect_error) {
 } else {
     echo '<p>Connexion au serveur MySQL établie avec succès.</p>';
 }
+tesing
 ?>
