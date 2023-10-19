@@ -29,7 +29,10 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            # Ensure the SSH key is properly configured
+            echo "${{ secrets.SSH_PUBLIC_KEY }}" >> ~/.ssh/authorized_keys
+            # Continue with your deployment steps
             docker pull flamware/cdocker:latest
             docker stop cdocker || true
-            docker rm CDocker || true
+            docker rm cdocker || true
             docker run -d -p 3000:3000 --name cdocker flamware/cdocker:latest
