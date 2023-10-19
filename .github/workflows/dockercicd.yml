@@ -1,4 +1,4 @@
-name: CI/CD
+name: Deploy to VPS
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -14,15 +14,21 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t your-docker-image-name .
+        run: docker build -t CDocker .
 
       - name: Push Docker image to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
           docker push your-docker-image-name
 
-      - name: Deploy to your server
-        run: |
-          # Add your deployment steps here
-          # Example: ssh into your server and update the running container
-
+      - name: SSH into VPS and update the application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            docker pull CDocker
+            docker stop CDocker || true
+            docker rm CDocker || true
+            docker run -d -p 3000:3000 --name your-container-name your-docker-image-name
