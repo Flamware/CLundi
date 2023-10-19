@@ -250,6 +250,8 @@ app.get('/load-stories', async (req, res) => {
                 author: row.author,
                 content: row.content
             }));
+            /*rever the stories*/
+            stories.reverse();
             res.status(200).json({ stories: stories });
         } else {
             res.status(200).json({ stories: [] }); // Return an empty array if there are no stories

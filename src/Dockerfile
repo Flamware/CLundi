@@ -2,7 +2,7 @@
 FROM node:12
 
 # Set the working directory inside the container
-WORKDIR /app/public
+WORKDIR /app
 
 # Copy the package.json and package-lock.json files to the container
 COPY package*.json ./
@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 8080
 
 # Define the command to start your application
-CMD ["node", "public/server.js"]
+CMD ["node", "server.js"]
