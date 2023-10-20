@@ -23,14 +23,6 @@ app.use(session({
     saveUninitialized: true,
 }));
 
-// Create a MySQL connection pool
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'admin',
-    password: 'qDfXcvS01@',
-    database: 'clundi', // Use your database name here
-});
-
 // Middleware to check if the user is authenticated
 function requireAuthentication(req, res, next) {
     if (req.session.isAuthenticated) {
@@ -116,46 +108,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// Initialize the database tables when the server starts
-async function initializeDatabase() {
-    try {
-        // Create "stories" table
-        await db.query(`
-            CREATE TABLE IF NOT EXISTS stories (
-                                                   story_id INT AUTO_INCREMENT PRIMARY KEY,
-                                                   author VARCHAR(255) NOT NULL,
-                content TEXT NOT NULL
-                )
-        `);
 
-        // Create "users" table
-        await db.query(`
-            CREATE TABLE IF NOT EXISTS users (
-                                                 user_id INT AUTO_INCREMENT PRIMARY KEY,
-                                                 username VARCHAR(255) NOT NULL UNIQUE,
-                password CHAR(60) NOT NULL,
-                email VARCHAR(255)
-                )
-        `);
-        // Add this code in your initializeDatabase function to create the comments table
-
-        await db.query(`
-    CREATE TABLE IF NOT EXISTS comments (
-        comment_id INT AUTO_INCREMENT PRIMARY KEY,
-        story_id INT,
-        author VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL
-    )
-`);
-
-
-        console.log('Database tables created successfully');
-    } catch (error) {
-        console.error('Error creating database tables:', error);
-    }
-}
-
-// Serve the login page
 app.get('/login', (req, res) => {
     console.log("This site was designed by Valérian Rouziès. Axel Antunes wouldn't have succeeded without him.");
     try {
@@ -284,5 +237,3 @@ httpServer.listen(portHTTP, () => {
 httpsServer.listen(portHTTPS, () => {
     console.log(`HTTPS Server is running on port ${portHTTPS}`);
 });
-
-initializeDatabase();
