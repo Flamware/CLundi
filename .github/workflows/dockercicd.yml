@@ -13,6 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose
+        if: runner.os == 'Linux'  # This is for Ubuntu-based runners; adjust for other OS types
+
       - name: Build Docker image
         run: docker build -t flamware/cdocker:latest .
 
