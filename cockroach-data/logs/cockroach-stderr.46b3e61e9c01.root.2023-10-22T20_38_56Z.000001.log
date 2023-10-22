@@ -1,0 +1,7 @@
+I231022 20:38:56.624165 1 util/log/file_sync_buffer.go:238 ⋮ [config]   file created at: 2023/10/22 20:38:56
+I231022 20:38:56.624209 1 util/log/file_sync_buffer.go:238 ⋮ [config]   running on machine: ‹46b3e61e9c01›
+I231022 20:38:56.624219 1 util/log/file_sync_buffer.go:238 ⋮ [config]   binary: CockroachDB CCL v21.1.8 (x86_64-unknown-linux-gnu, built 2021/08/30 13:41:17, go1.15.14)
+I231022 20:38:56.624228 1 util/log/file_sync_buffer.go:238 ⋮ [config]   arguments: ‹[/cockroach/cockroach start --insecure]›
+I231022 20:38:56.624256 1 util/log/file_sync_buffer.go:238 ⋮ [config]   log format (utf8=✓): crdb-v2
+I231022 20:38:56.624262 1 util/log/file_sync_buffer.go:238 ⋮ [config]   line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid [chan@]file:line redactionmark \[tags\] [counter] msg
+I231022 20:38:56.621970 1 util/log/flags.go:180  [-] 1  stderr capture started

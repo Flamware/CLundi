@@ -10,6 +10,8 @@ const client = new Client({
 
 // Function to establish the connection to the database
 const connectDatabase = async () => {
+    console.log("Connecting to the database");
+    console.log("Database URL: " + process.env.DATABASE_URL);
     try {
         await client.connect();
         console.log("Connected to the database");
@@ -17,9 +19,9 @@ const connectDatabase = async () => {
         console.error("Error connecting to the database:", error);
     }
 };
-
 // Export the client and the connectDatabase function
 module.exports = {
     client,
     connectDatabase,
 };
+
