@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  node-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=postgresql://axel:iq1s-Ex2sQCAyJNW0BLK1A@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
+      # Add any other environment variables your app may need
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./src:/app
+      # Map your local 'src' directory to the '/app' directory in the container
+
+  cockroach-db:
+    image: cockroachdb/cockroach:v21.1.8
+    ports:
+      - "26257:26257"
+    command: start --insecure
+    # Here, we're using an insecure setup for simplicity. In a production setup, use secure mode.
+    volumes:
+      - ./cockroach-data:/cockroach/cockroach-data
+      # Map a local directory to store CockroachDB data
+
+# Define a network to connect both services
+networks:
+  default:
+    external:
+      name: clundi_default
