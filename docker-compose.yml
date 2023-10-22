@@ -1,0 +1,26 @@
+version: '3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8080"
+      - "8444:8443"
+    volumes:
+      - ./src:/app  # Corrected volume mapping
+    depends_on:
+      - mysql-server
+
+  mysql-server:
+    image: mysql:latest
+    ports:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=qDfXcvS01@
+      - MYSQL_PASSWORD=qDfXcvS01@
+      - MYSQL_DATABASE=clundi
+      - MYSQL_HOST=admin
+      - MYSQL_PORT=3306
+    volumes:
+      - /home/axel/db:/var/lib/mysql
