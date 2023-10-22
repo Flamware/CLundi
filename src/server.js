@@ -2,17 +2,17 @@ const express = require('express');
 const path = require('path');
 const https = require('https');
 const fs = require('fs');
-const mysql = require('mysql2/promise');
 const session = require('express-session');
 const http = require('http');
-
+const { client, connectDatabase } = require('./database.js'); // Import the database module
 const app = express();
 const portHTTP = 8080; // HTTP port
 const portHTTPS = 8443; // HTTPS port
 const baseurl = `https://localhost:${portHTTPS}`;
 const projectDir = __dirname;
 
-// Serve static files from the "public" directory
+connectDatabase();
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
@@ -22,14 +22,6 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
 }));
-
-// Create a MySQL connection pool
-const db = mysql.createPool({
-    host: 'localhost',
-    user: 'admin',
-    password: 'qDfXcvS01@',
-    database: 'clundi', // Use your database name here
-});
 
 // Middleware to check if the user is authenticated
 function requireAuthentication(req, res, next) {
@@ -68,11 +60,11 @@ app.post('/register', async (req, res) => {
     }
 
     try {
-        const [results] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
-        if (results.length > 0) {
+        const { rows } = await client.query('SELECT * FROM users WHERE username = $1', [username]);
+        if (rows.length > 0) {
             res.status(200).json({ redirect: '' });
         } else {
-            const [insertResults] = await db.query('INSERT INTO users (username, password, email) VALUES (?, ?, ?)', [username, password, email]); // Added 'email'
+            await client.query('INSERT INTO users (username, password, email) VALUES ($1, $2, $3)', [username, password, email]);
             res.status(201).json({ redirect: '/login' });
         }
     } catch (error) {
@@ -80,6 +72,8 @@ app.post('/register', async (req, res) => {
         res.status(500).send('Error inserting the user into the database');
     }
 });
+
+
 
 
 app.get('/register', async (req, res) => {
@@ -101,8 +95,9 @@ app.post('/login', async (req, res) => {
     }
 
     try {
-        const [results] = await db.query('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
-        if (results.length > 0) {
+        const { rows } = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+
+        if (rows.length > 0) {
             // Set the user information in the session
             req.session.isAuthenticated = true;
             req.session.username = username; // Set the user's username in the session
@@ -112,50 +107,12 @@ app.post('/login', async (req, res) => {
         }
     } catch (error) {
         console.error(error);
-        res.status(500).send('Error inserting the user into the database');
+        res.status(500).send('Error during login');
     }
 });
 
-// Initialize the database tables when the server starts
-async function initializeDatabase() {
-    try {
-        // Create "stories" table
-        await db.query(`
-            CREATE TABLE IF NOT EXISTS stories (
-                                                   story_id INT AUTO_INCREMENT PRIMARY KEY,
-                                                   author VARCHAR(255) NOT NULL,
-                content TEXT NOT NULL
-                )
-        `);
-
-        // Create "users" table
-        await db.query(`
-            CREATE TABLE IF NOT EXISTS users (
-                                                 user_id INT AUTO_INCREMENT PRIMARY KEY,
-                                                 username VARCHAR(255) NOT NULL UNIQUE,
-                password CHAR(60) NOT NULL,
-                email VARCHAR(255)
-                )
-        `);
-        // Add this code in your initializeDatabase function to create the comments table
-
-        await db.query(`
-    CREATE TABLE IF NOT EXISTS comments (
-        comment_id INT AUTO_INCREMENT PRIMARY KEY,
-        story_id INT,
-        author VARCHAR(255) NOT NULL,
-        content TEXT NOT NULL
-    )
-`);
 
 
-        console.log('Database tables created successfully');
-    } catch (error) {
-        console.error('Error creating database tables:', error);
-    }
-}
-
-// Serve the login page
 app.get('/login', (req, res) => {
     console.log("This site was designed by Valérian Rouziès. Axel Antunes wouldn't have succeeded without him.");
     try {
@@ -181,7 +138,7 @@ app.post('/submit-story', requireAuthentication, async (req, res) => {
         const author = req.session.username; // Get the authenticated user's username
 
         // Insert the story into the database with the author's name
-        const [insertResults] = await db.query('INSERT INTO stories (author, content) VALUES (?, ?)', [author, story]);
+        await client.query('INSERT INTO stories (author, content) VALUES ($1, $2)', [author, story]);
         console.log("Story inserted successfully");
         res.status(201).json({ redirect: '/' });
     } catch (error) {
@@ -189,6 +146,7 @@ app.post('/submit-story', requireAuthentication, async (req, res) => {
         res.status(500).json({ error: 'Error submitting the story' });
     }
 });
+
 // Route to submit a comment
 app.post('/submit-comment', requireAuthentication, async (req, res) => {
     const { storyId, comment } = req.body;
@@ -202,7 +160,7 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
     const author = req.session.username;
 
     try {
-        const [insertResults] = await db.query('INSERT INTO comments (story_id, author, content) VALUES (?, ?, ?)', [storyId, author, comment]);
+        await client.query('INSERT INTO comments (story_id, author, content) VALUES ($1, $2, $3)', [storyId, author, comment]);
         console.log('Comment submitted successfully');
         res.status(201).json({ success: 'Comment added successfully' });
     } catch (error) {
@@ -213,46 +171,47 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
 });
 
 
+
 // Route to retrieve comments for a story
 app.get('/load-comments', async (req, res) => {
     try {
-        const [results] = await db.query('SELECT comment_id, story_id, author, content FROM comments'); // Include story_id
-        if (results.length > 0) {
-            const comments = results.map(row => ({
-               //returning the content of the comment and the author
-                id: row.comment_id, // Include story_id in the response
-                storyId: row.story_id,
-                    author: row.author,
-                    content: row.content
-}
-            ));
-            res.status(200).json({ comments: comments });
-            console.log("Comments loaded successfully and is : "+comments);
+        const results = await client.query('SELECT comment_id, story_id, author, content FROM comments');
+        const comments = results.rows.map(row => ({
+            id: row.comment_id,
+            storyId: row.story_id,
+            author: row.author,
+            content: row.content
+        }));
+
+        if (comments.length > 0) {
+            res.status(200).json({ comments });
+            console.log("Comments loaded successfully and is: " + JSON.stringify(comments));
         } else {
             res.status(200).json({ comments: [] });
-            console.log("nothing")// Return an empty array if there are no stories
-
+            console.log("No comments found"); // Return an empty array if there are no comments
         }
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Error fetching stories' });
+        res.status(500).json({ error: 'Error fetching comments' });
     }
 });
 
 
 
+
 app.get('/load-stories', async (req, res) => {
     try {
-        const [results] = await db.query('SELECT story_id, author, content FROM stories'); // Include story_id
-        if (results.length > 0) {
-            const stories = results.map(row => ({
-                id: row.story_id, // Include story_id in the response
-                author: row.author,
-                content: row.content
-            }));
-            /*rever the stories*/
+        const results = await client.query('SELECT story_id, author, content FROM stories');
+        const stories = results.rows.map(row => ({
+            id: row.story_id,
+            author: row.author,
+            content: row.content
+        }));
+
+        if (stories.length > 0) {
+            // Reverse the order of stories
             stories.reverse();
-            res.status(200).json({ stories: stories });
+            res.status(200).json({ stories });
         } else {
             res.status(200).json({ stories: [] }); // Return an empty array if there are no stories
         }
@@ -262,12 +221,20 @@ app.get('/load-stories', async (req, res) => {
     }
 });
 
+
 app.get('/logout', requireAuthentication, (req, res) => {
     // Destroy the session
-    req.session.destroy();
-    // Redirect to the login page
-    res.redirect('/login');
+    req.session.destroy(err => {
+        if (err) {
+            console.error('Error destroying the session:', err);
+            res.status(500).send('Error logging out');
+        } else {
+            // Redirect to the login page
+            res.redirect('/login');
+        }
+    });
 });
+
 
 const httpsOptions = {
     key: fs.readFileSync('certs/private.key'),
@@ -284,5 +251,3 @@ httpServer.listen(portHTTP, () => {
 httpsServer.listen(portHTTPS, () => {
     console.log(`HTTPS Server is running on port ${portHTTPS}`);
 });
-
-initializeDatabase();

@@ -1,26 +1,31 @@
 version: '3'
+
 services:
-  app:
+  node-app:
     build:
       context: .
       dockerfile: Dockerfile
-    ports:
-      - "8081:8080"
-      - "8444:8443"
-    volumes:
-      - ./src:/app  # Corrected volume mapping
-    depends_on:
-      - mysql-server
-
-  mysql-server:
-    image: mysql:latest
-    ports:
-      - 3306
     environment:
-      - MYSQL_ROOT_PASSWORD=qDfXcvS01@
-      - MYSQL_PASSWORD=qDfXcvS01@
-      - MYSQL_DATABASE=clundi
-      - MYSQL_HOST=admin
-      - MYSQL_PORT=3306
+      - DATABASE_URL=postgresql://axel:iq1s-Ex2sQCAyJNW0BLK1A@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
+      # Add any other environment variables your app may need
+    ports:
+      - "8080:8080"
     volumes:
-      - /home/axel/db:/var/lib/mysql
+      - ./src:/app
+      # Map your local 'src' directory to the '/app' directory in the container
+
+  cockroach-db:
+    image: cockroachdb/cockroach:v21.1.8
+    ports:
+      - "26257:26257"
+    command: start --insecure
+    # Here, we're using an insecure setup for simplicity. In a production setup, use secure mode.
+    volumes:
+      - ./cockroach-data:/cockroach/cockroach-data
+      # Map a local directory to store CockroachDB data
+
+# Define a network to connect both services
+networks:
+  default:
+    external:
+      name: clundi_default
