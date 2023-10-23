@@ -11,6 +11,13 @@ body {
     color: #333;
     font-family: Arial, sans-serif;
 }
+.reply-comment {
+    margin-left: 20px; /* Adjust the value as needed for the desired indentation */
+}
+/* Add this CSS to your HTML or a separate CSS file */
+.comment.reply-comment {
+    margin-left: 20px; /* Adjust the margin as per your preference */
+}
 
 /* Style the header section */
 header {

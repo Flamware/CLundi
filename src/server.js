@@ -127,7 +127,7 @@ app.get('/login', (req, res) => {
 
 app.post('/submit-story', requireAuthentication, async (req, res) => {
     const { story } = req.body;
-
+    console.log("Story: " + story);
     if (!story) {
         res.status(400).json({ error: 'Content is required' });
         return;
@@ -149,7 +149,8 @@ app.post('/submit-story', requireAuthentication, async (req, res) => {
 
 // Route to submit a comment
 app.post('/submit-comment', requireAuthentication, async (req, res) => {
-    const { storyId, comment } = req.body;
+
+    const { storyId, comment, parentCommentId } = req.body;
 
     if (!storyId || !comment) {
         res.status(400).json({ error: 'Story ID and comment content are required' });
@@ -160,7 +161,21 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
     const author = req.session.username;
 
     try {
-        await client.query('INSERT INTO comments (story_id, author, content) VALUES ($1, $2, $3)', [storyId, author, comment]);
+        // Log the storyId here for debugging
+        console.log('Received storyId for comment:', storyId);
+        const query = parentCommentId
+            ? 'INSERT INTO comments (story_id, author, content, parent_comment_id) VALUES ($1, $2, $3, $4)'
+            : 'INSERT INTO comments (story_id, author, content) VALUES ($1, $2, $3)';
+        //print $1, $2, $3, $4
+        console.log("Query: " + query);
+        console.log("Params: " + storyId + ", " + author + ", " + comment + ", " + parentCommentId);
+
+
+        const params = parentCommentId
+            ? [storyId, author, comment, parentCommentId]
+            : [storyId, author, comment];
+
+        await client.query(query, params);
         console.log('Comment submitted successfully');
         res.status(201).json({ success: 'Comment added successfully' });
     } catch (error) {
@@ -172,29 +187,32 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
 
 
 
+
 // Route to retrieve comments for a story
 app.get('/load-comments', async (req, res) => {
     try {
-        const results = await client.query('SELECT comment_id, story_id, author, content FROM comments');
-        const comments = results.rows.map(row => ({
-            id: row.comment_id,
-            storyId: row.story_id,
-            author: row.author,
-            content: row.content
-        }));
-
-        if (comments.length > 0) {
-            res.status(200).json({ comments });
-            console.log("Comments loaded successfully and is: " + JSON.stringify(comments));
-        } else {
-            res.status(200).json({ comments: [] });
-            console.log("No comments found"); // Return an empty array if there are no comments
-        }
+        // Query the database to retrieve all comments
+        const results = await client.query('SELECT comment_id, story_id, author, content, parent_comment_id FROM comments');
+        // Send the results to the client as a JSON response
+        res.status(200).json({ comments: results.rows });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error fetching comments' });
     }
 });
+app.get('/load-replies', async (req, res) => {
+    try {
+        // Query in the database comments that have a parent_comment_id
+        const results = await client.query('SELECT comment_id, story_id, author, content, parent_comment_id FROM comments WHERE parent_comment_id IS NOT NULL');
+        // Send the results to the client as a JSON response
+        res.status(200).json({ replies: results.rows });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error fetching replies' });
+    }
+});
+
+
 
 
 

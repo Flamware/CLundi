@@ -1,13 +1,9 @@
-// Post request to /submit-story
-
+// Function to send a POST request for submitting a story
 async function submitStory() {
-    // Get the values from the form
     const story = document.getElementById("story").value;
-    const baseurl = window.location.origin;
+
     try {
-        // Send a POST request to the server
-        console.log("Sending POST request to /submit-story from base URL: " + baseurl + "/submit-story");
-        const response = await fetch(baseurl + '/submit-story', {
+        const response = await fetch(`/submit-story`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -15,18 +11,42 @@ async function submitStory() {
             body: JSON.stringify({ story: story })
         });
 
-        const data = await response.json();
         if (response.ok) {
-            // Refresh the content
             await refreshContent();
         }
     } catch (error) {
         console.error("An error occurred:", error);
-        // Handle the error as needed
     }
 }
+// Function to send a GET request to load replies
+async function loadreplies() {
+    try {
+        const response = await fetch('/load-replies', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-async function loadStories() {
+        if (response.ok) {
+            const data = await response.json();
+            const replies = data.replies;
+
+            if (replies && replies.length > 0) {
+                replies.forEach(reply => {
+                    const storySection = document.getElementById(reply.comment_id);
+                    const replySection = createCommentSection(reply);
+                    storySection.appendChild(replySection);
+                });
+            }
+        } else {
+            console.error("Server returned an error:", response.status, response.statusText);
+        }
+    } catch (error) {
+        console.error("An error occurred", error);
+    }
+}
+async function loadStories(storiesContainer) {
     try {
         const response = await fetch('/load-stories', {
             method: 'GET',
@@ -38,8 +58,9 @@ async function loadStories() {
         if (response.ok) {
             const data = await response.json();
             if (data.stories) {
-                data.stories.forEach(story => {
-                    createStorySection(story, story.id);
+                data.stories.forEach((story, index) => {
+                    const storySection = createStorySection(story);
+                    storiesContainer.appendChild(storySection);
                 });
             }
         }
@@ -47,50 +68,45 @@ async function loadStories() {
         console.error("An error occurred", error);
     }
 }
-async function createStorySection(story, storyId) {
-    const storiesContainer = document.getElementById("stories-container");
+// Function to create a story section
+function createStorySection(story) {
     const storySection = document.createElement("section");
     storySection.className = "story";
-    storySection.id = "story-" + storyId;
+    storySection.id = story.id;
+    const author = createParagraph("author", story.author);
+    const content = createParagraph("content", story.content);
+    storySection.appendChild(author);
+    storySection.appendChild(content);
+    console.log("Adding story:", story);
+    //add comment button and text area
+    console.log("Adding comment button and text area");
+    console.log("Story id:", story.id);
+    console.log("Story author:", story.author);
+    console.log("Story content:", story.content);
 
-    const storyAuthor = document.createElement("p");
-    storyAuthor.className = "author-name"; // Add this line to assign a class
-    storyAuthor.innerText = story.author;
-
-    const storyContent = document.createElement("p");
-    storyContent.className = "story-content"; // Add this line to assign a class
-    storyContent.innerText = story.content;
-
-
-
-    const commentForm = document.createElement("form");
-    commentForm.id = "comment-form-" + storyId;
-    commentForm.className = "comment-form";
-
-    const commentInput = document.createElement("input");
-    commentInput.type = "text";
-    commentInput.id = "comment-" + storyId;
-    commentInput.placeholder = "Trashtalkez ici";
-
-    const commentButton = document.createElement("button");
-    commentButton.type = "submit";
-    commentButton.innerText = "poster";
-
-    commentForm.appendChild(commentInput);
-    commentForm.appendChild(commentButton);
-    storySection.appendChild(storyAuthor);
-    storySection.appendChild(storyContent);
-    storySection.appendChild(commentForm);
-
-    storiesContainer.appendChild(storySection);
-
-    commentForm.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
-        submitComment(storyId);
-    });
+    const replyButton = createCommentForm(story);
+    storySection.appendChild(replyButton);
+    return storySection;
 }
+
+
+function createParagraph(className, text) {
+    const paragraph = document.createElement("p");
+    paragraph.className = className;
+    paragraph.innerText = text;
+    return paragraph;
+}
+async function refreshContent() {
+    const storiesContainer = document.getElementById("stories-container");
+    storiesContainer.innerHTML = ''; // Clear existing content.
+
+    // Load the latest stories and comments.
+    await loadStories(storiesContainer);
+    await loadComments();
+}
+
+// Function to send a GET request to load comments
 async function loadComments() {
-    //for each story, load the comments
     try {
         const response = await fetch('/load-comments', {
             method: 'GET',
@@ -101,76 +117,95 @@ async function loadComments() {
 
         if (response.ok) {
             const data = await response.json();
-            if (data.comments) {
-                data.comments.forEach(comment => {
-                //write the comments to the page
-                    createCommentSection(comment, comment.id, comment.storyId);
+            const comments = data.comments;
+
+            if (comments && comments.length > 0) {
+                comments.forEach(comment => {
+                    console.log("Adding comment:", comment);
+                    if (!comment.parent_comment_id) {
+                        const storySection = document.getElementById(comment.story_id);
+                        const commentSection = createCommentSection(comment);
+                        storySection.appendChild(commentSection);
+                    }
+                    else {
+                        const parentCommentSection = document.getElementById(comment.parent_comment_id);
+                        const replySection = createCommentSection(comment);
+                        parentCommentSection.appendChild(replySection);
+                    }
                 });
             }
+        } else {
+            console.error("Server returned an error:", response.status, response.statusText);
         }
-    }catch (error) {
+    } catch (error) {
         console.error("An error occurred", error);
     }
 }
-async function createCommentSection(comment, commentId, storyId) {
-    const storySection = document.getElementById("story-" + storyId);
-    console.log(storyId);
-    // Create a comment section inside the appropriate story section
+// Function to create a comment section
+function createCommentSection(comment) {
     const commentSection = document.createElement("section");
     commentSection.className = "comment";
-    commentSection.id = "comment-" + commentId;
-
-    const commentAuthor = document.createElement("p");
-    commentAuthor.innerText = comment.author;
-
-    const commentContent = document.createElement("p");
-    commentContent.innerText = comment.content;
-
-    commentSection.appendChild(commentAuthor);
-    commentSection.appendChild(commentContent);
-
-
-    storySection.appendChild(commentSection);
+    commentSection.id = comment.comment_id;
+    const author = createParagraph("author", comment.author);
+    const content = createParagraph("content", comment.content);
+    commentSection.appendChild(author);
+    commentSection.appendChild(content);
+    //add comment button and text area
+    const replyButton = createCommentForm(comment);
+    commentSection.appendChild(replyButton);
+    return commentSection;
 }
-async function submitComment(storyId) {
-    // Get the values from the form
-    const comment = document.getElementById("comment-" + storyId).value;
-    const baseurl = window.location.origin;
-    try {
-        // Send a POST request to the server
-        console.log("Sending POST request to /submit-comment from base URL: " + baseurl + "/submit-comment");
-        const response = await fetch(baseurl + '/submit-comment', {
+// Function to create a comment form
+function createCommentForm(comment) {
+    const form = document.createElement("form");
+    form.className = "comment-form";
+    form.id = "comment-form-" + comment.comment_id;
+    const textArea = document.createElement("textarea");
+    textArea.className = "comment-input";
+    textArea.id = "comment-input-" + comment.comment_id;
+    textArea.placeholder = "Reply to this comment";
+    form.appendChild(textArea);
+    const submitButton = document.createElement("button");
+    submitButton.className = "comment-submit";
+    submitButton.innerText = "Reply";
+    submitButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        submitComment(comment);
+    });
+    form.appendChild(submitButton);
+    return form;
+}
+// Function to send a POST request for submitting a comment
+async function submitComment(comment) {
+        //if it is a reply, get the parent comment id
+
+        const commentInput = document.getElementById("comment-input-" + comment.comment_id);
+        const content = commentInput.value;
+        //if comment.story_id is undefined, set storyId to comment.id
+        const storyId = comment.story_id ? comment.story_id : comment.id;
+        try {
+        const response = await fetch(`/submit-comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ storyId: storyId, comment: comment })
+            body: JSON.stringify({ storyId: storyId,comment: content, parentCommentId: comment.comment_id })
         });
 
-        const data = await response.json();
         if (response.ok) {
             await refreshContent();
         }
     } catch (error) {
         console.error("An error occurred:", error);
-        // Handle the error as needed
     }
 }
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById("submit-story-form");
     form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the default form submission
+        event.preventDefault();
         submitStory();
     });
-});
-refreshContent();
-async function refreshContent() {
-    // Clear the existing content
-    const storiesContainer = document.getElementById("stories-container");
-    storiesContainer.innerHTML = '';
 
-    // Load stories and comments
-    await loadStories();
-    await loadComments();
-}
+    const storiesContainer = document.getElementById("stories-container");
+    refreshContent(storiesContainer);
+});
