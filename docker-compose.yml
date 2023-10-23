@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - DATABASE_URL=postgresql://axel:PDzcEoFTiyY3SXYbvquxBg@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
+      - DATABASE_URL=postgresql://axel:IE98uP_RvVuVsBsOf1zG1Q@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
     ports:
         - "8080:8080"
         - "8443:8443"
