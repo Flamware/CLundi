@@ -1,5 +1,4 @@
 version: '3'
-
 services:
   node-app:
     build:
@@ -7,13 +6,12 @@ services:
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://axel:BHlG7j676OPb7u6uFJhf_Q@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
-    image: flamware/cdocker:latest  # Specify the image name and tag
+    image: flamware/cdocker:latest
     ports:
       - "8080:8080"
       - "8443:8443"
     volumes:
       - ./src:/app
-
 
   cockroach-db:
     image: cockroachdb/cockroach:v21.1.8
@@ -23,5 +21,9 @@ services:
     volumes:
       - ./cockroach-data:/cockroach/cockroach-data
 
-networks:
-  default:
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --cleanup

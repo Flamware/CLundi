@@ -20,12 +20,12 @@
           if: runner.os == 'Linux'  # This is for Ubuntu-based runners; adjust for other OS types
 
         - name: Build Docker image
-          run: docker build -t flamware/cdocker:1.6.1 .
+          run: docker build -t flamware/cdocker:latest .
 
         - name: Push Docker image to Docker Hub
           run: |
             echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            docker push flamware/cdocker:1.6.1
+            docker push flamware/cdocker:latest
 
         - name: SSH into VPS and update the application
           uses: appleboy/ssh-action@master
