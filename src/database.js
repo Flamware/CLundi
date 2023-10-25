@@ -1,9 +1,8 @@
 const { Client } = require("pg");
 const fs = require("fs");
 const readline = require("readline");
-const con="postgresql://axel:BHlG7j676OPb7u6uFJhf_Q@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full"
 const client = new Client({
-    connectionString: con,
+    connectionString: process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false,
     }
