@@ -34,7 +34,7 @@
             username: ${{ secrets.SSH_USERNAME }}
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
-              cd /home/docker/CLundi
+              cd /home/docker/
               docker-compose down -v
               docker rmi -f $(docker images -q)
               docker-compose pull
