@@ -35,7 +35,7 @@
             key: ${{ secrets.SSH_PRIVATE_KEY }}
             script: |
               cd /home/docker/CLundi
-              docker-compose stop
-              docker-compose rm -f
+              docker-compose down -v
+              docker rmi -f $(docker images -q)
               docker-compose pull
               docker-compose up -d
