@@ -2,7 +2,7 @@
 body, h1, h2, h3, p, ul, li {
     margin: 0;
     padding: 0;
-    box-sizing: border-box; /* Include padding and border in element dimensions */
+    box-sizing: border-box;
 }
 
 /* Set a background color and text color for the body */
@@ -11,51 +11,32 @@ body {
     color: #333;
     font-family: Arial, sans-serif;
 }
-.reply-comment {
-    margin-left: 20px; /* Adjust the value as needed for the desired indentation */
-}
-/* Add this CSS to your HTML or a separate CSS file */
-.comment.reply-comment {
-    margin-left: 20px; /* Adjust the margin as per your preference */
-}
 
-/* Style the header section */
-header {
+/* Header styles */
+.header {
+    display: flex;
+    justify-content: space-between; /* Align items horizontally */
+    align-items: center;
     background-color: #242038; /* Blue header background */
     color: #CAC4CE;
     text-align: center;
-    padding: 20px;
+    padding: 10px; /* Reduce the top and bottom padding */
     border-radius: 0 0 10px 10px; /* Rounded bottom corners */
 }
 
-header h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
+.header img {
+    max-width: 40px;
+    height: auto;
+    margin: 0 10px; /* Add spacing between logos */
 }
 
-header p {
-    font-size: 18px;
+.header .text {
+    flex: 1; /* Fill available space */
 }
 
-/* Style the navigation menu */
-nav {
-    background-color: #333;
-    color: #fff;
-    padding: 10px;
-}
-
-nav ul {
-    list-style: none;
-}
-
-nav ul li {
-    display: inline;
-    margin-right: 20px;
-}
-
-nav ul li a {
+.header .logout a {
     text-decoration: none;
-    color: #fff;
+    color: #CAC4CE;
 }
 
 /* Style the main content section */
@@ -74,24 +55,6 @@ main h2 {
     margin-bottom: 20px;
 }
 
-/* Header logo styles */
-.header-logo {
-    display: flex;
-    align-items: center;
-}
-
-.header-logo-text {
-    text-align: center;
-    /* Position the text at the center of the header-logo div */
-    flex: 1;
-}
-
-.header-logo-picture img {
-    max-width: 40px; /* Adjust the size as needed */
-    height: auto;
-}
-
-/* Style the story submission form */
 #submit-story-form label {
     display: block;
     font-weight: bold;
@@ -139,11 +102,6 @@ main h2 {
     color: #000;
 }
 
-/* Author name bold */
-#stories-container .story .author {
-    font-weight: bold;
-}
-
 .author-name {
     font-weight: bold;
 }
@@ -160,13 +118,19 @@ main h2 {
 /* Style the footer */
 footer {
     text-align: center;
-background-color: #242038;
-
+    background-color: #242038;
+    background-attachment: scroll;
     color: #fff;
     padding: 10px 0;
     width: 100%;
     border-radius: 10px 10px 0 0; /* Rounded top corners */
 }
+
+.footer_contents {
+    width: 1000px; /* Visible width of the footer */
+    margin: auto;
+}
+
 @media (max-width: 768px) {
     main {
         margin: 10px;

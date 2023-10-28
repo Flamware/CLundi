@@ -7,20 +7,25 @@
     <link rel="stylesheet" href="/css/clundi.css">
 </head>
 <body>
-<header>
-    <div class="header-logo">
-        <a class="header-logo-picture" href="https://ae.utbm.fr/">
-            <img src="/img/logo_no_text.png" alt="Logo Image">
-        </a>
-        <a class="header-logo-text" href="/public">
-            <span>UT-X</span>
-        </a>
-    <!-- Add additional header content or navigation links here -->
-    <a class="header-logout">
-        <a href="/logout">Logout</a>
-    </a>
+<header class="header">
+    <div class="ae">
+        <img src="/img/logo_no_text.png" alt="AE Logo">
+    </div>
+    <div class="utbm">
+        <img src="/img/Utbm.svg">
+    </div>
+    <div class="utx-main">
+        <img src="/img/utx.png" alt="UTX Main Logo">
+    </div>
+    <div class="text">
+        <img src="/img/UTX_TEXT.png" alt="utx_logo">
+    </div>
+    <div class="logout">
+        <!-- Logout Link -->
+        <a href="logout.html">Logout</a>
     </div>
 </header>
+
 
 <main>
     <section id="submit-story">
@@ -31,13 +36,14 @@
             <button type="submit" id="submit-button">Partager</button>
         </form>
     </section>
-
     <section id="stories-container">
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2023 Clundi V1.6.2, Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
+    <div class="footer_contents">
+    <p>&copy; 2023 Clundi V1.6.3, Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
+    </div>
 </footer>
 <script src="/api/client.js"></script>
 <script>console.log("client.js chargé")</script>

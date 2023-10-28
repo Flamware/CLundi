@@ -107,13 +107,29 @@ button:hover {
 /* Style the footer */
 footer {
     text-align: center;
-    position: absolute;
-    bottom: 0;
-    background-color: #333;
-    color: white;
+    background-color: #242038;
+    background-attachment: scroll;
+
+    color: #fff;
     padding: 10px 0;
     width: 100%;
-    border-radius: 0 0 5px 5px; /* Rounded bottom corners */
+    border-radius: 10px 10px 0 0; /* Rounded top corners */
+    height:24px; // Replace with the height your footer should be
+width: 100%; // Don't change
+background-repeat: repeat;
+    background-attachment: scroll;
+    background-position: 0% 0%;
+    position: fixed;
+    bottom: 0pt;
+    left: 0pt;
+
+
+}
+.footer_contents {
+
+    height:24px; // Replace with the height your footer should be
+width: 1000px; // Visible width of footer
+margin:auto;
 }
 
 /* Responsive design for small screens */
