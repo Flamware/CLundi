@@ -1,41 +1,40 @@
-  name: Deploy to VPS
+name: Deploy to VPS
 
-  on:
-    push:
-      branches:
-        - main
+on:
+  push:
+    branches:
+      - main
 
-  jobs:
-    deploy:
-      runs-on: ubuntu-latest
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
 
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        - name: Install Docker Compose
-          run: |
-            sudo apt-get update
-            sudo apt-get install docker-compose
-          if: runner.os == 'Linux'  # This is for Ubuntu-based runners; adjust for other OS types
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install docker-compose
+        if: runner.os == 'Linux'  # This is for Ubuntu-based runners; adjust for other OS types
 
-        - name: Build Docker image
-          run: docker build -t flamware/cdocker:latest .
+      - name: Build and push Docker image
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker build -t flamware/cdocker:latest .
+          echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+          docker push flamware/cdocker:latest
 
-        - name: Push Docker image to Docker Hub
-          run: |
-            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            docker push flamware/cdocker:latest
-
-        - name: SSH into VPS and update the application
-          uses: appleboy/ssh-action@master
-          with:
-            host: ${{ secrets.SSH_HOST }}
-            username: ${{ secrets.SSH_USERNAME }}
-            key: ${{ secrets.SSH_PRIVATE_KEY }}
-            script: |
-              cd /home/docker/CLundi
-              docker-compose down -v
-              docker rmi -f $(docker images -q)
-              docker-compose pull
-              docker-compose up -d
+      - name: SSH into VPS and update the application
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/docker/CLundi
+            docker-compose pull
+            docker-compose up -d
