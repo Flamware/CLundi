@@ -6,7 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - DATABASE_URL=postgresql://axel:X538CGS_PRIytjjx0ws4zw@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
-    image: flamware/cdocker:latest  # Specify the image name and tag
+    image: flamware/cdocker:latest # Specify the image name and tag
     ports:
       - "8080:8080"
       - "8443:8443"
