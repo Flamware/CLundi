@@ -12,40 +12,35 @@ body {
     color: #333; /* Match the text color of the first design */
 }
 
-
-/* Center the logo and text in the header */
-header {
+/* Header styles */
+.header {
+    display: flex;
+    justify-content: space-between; /* Align items horizontally */
+    align-items: center;
     background-color: #242038; /* Blue header background */
     color: #CAC4CE;
     text-align: center;
-    padding: 20px;
+    padding: 10px; /* Reduce the top and bottom padding */
     border-radius: 0 0 10px 10px; /* Rounded bottom corners */
 }
 
-header h1 {
-    font-size: 36px;
-    margin-bottom: 10px;
-}
-
-header p {
-    font-size: 18px;
-}
-.header-logo {
-    display: flex;
-    align-items: center;
-}
-
-.header-logo-text {
-    text-align: center;
-    /* Position the text at the center of the header-logo div */
-    flex: 1;
-}
-
-.header-logo-picture img {
-    max-width: 40px; /* Adjust the size as needed */
+.header img {
+    max-width: 40px;
     height: auto;
 }
-/* Style the main content */
+.utbm img {
+    max-width: 80px;
+    height: auto;
+}
+
+.header .text {
+    flex: 1; /* Fill available space */
+}
+
+.header .logout a {
+    text-decoration: none;
+    color: #CAC4CE;
+}
 main {
     max-width: 800px;
     margin: 0 auto;

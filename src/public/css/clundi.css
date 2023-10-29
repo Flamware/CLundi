@@ -27,7 +27,10 @@ body {
 .header img {
     max-width: 40px;
     height: auto;
-    margin: 0 10px; /* Add spacing between logos */
+}
+.utbm img {
+    max-width: 80px;
+    height: auto;
 }
 
 .header .text {

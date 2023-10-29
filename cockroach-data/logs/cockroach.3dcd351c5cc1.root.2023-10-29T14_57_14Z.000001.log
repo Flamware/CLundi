@@ -1,0 +1,6 @@
+I231029 14:57:14.037740 1 util/log/file_sync_buffer.go:238 ⋮ [config]   file created at: 2023/10/29 14:57:14
+I231029 14:57:14.037803 1 util/log/file_sync_buffer.go:238 ⋮ [config]   running on machine: ‹3dcd351c5cc1›
+I231029 14:57:14.037818 1 util/log/file_sync_buffer.go:238 ⋮ [config]   binary: CockroachDB CCL v21.1.8 (x86_64-unknown-linux-gnu, built 2021/08/30 13:41:17, go1.15.14)
+I231029 14:57:14.037824 1 util/log/file_sync_buffer.go:238 ⋮ [config]   arguments: ‹[/cockroach/cockroach start --insecure]›
+I231029 14:57:14.037834 1 util/log/file_sync_buffer.go:238 ⋮ [config]   log format (utf8=✓): crdb-v2
+I231029 14:57:14.037838 1 util/log/file_sync_buffer.go:238 ⋮ [config]   line format: [IWEF]yymmdd hh:mm:ss.uuuuuu goid [chan@]file:line redactionmark \[tags\] [counter] msg
