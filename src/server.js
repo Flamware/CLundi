@@ -252,7 +252,58 @@ app.get('/logout', requireAuthentication, (req, res) => {
         }
     });
 });
-
+app.delete('/delete-story/:storyId', (req, res) => {
+    const storyId = req.params.storyId;
+    const username = req.session.username;
+    const query = 'SELECT * FROM stories WHERE story_id = $1 AND author = $2';
+    client.query(query, [storyId, username], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error deleting the story');
+            return;
+        }
+        if (results.rows.length === 0) {
+            res.status(403).send('You are not allowed to delete this story');
+            return;
+        }
+        //delete the story
+        const deleteQuery = 'DELETE FROM stories WHERE story_id = $1';
+        client.query(deleteQuery, [storyId], (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error deleting the story');
+                return;
+            }
+            res.status(200).send('Story deleted successfully');
+        });
+    });
+});
+app.delete('/delete-comment/:commentId', (req, res) => {
+    const commentId = req.params.commentId;
+    const username = req.session.username;
+    const query = 'SELECT * FROM comments WHERE comment_id = $1 AND author = $2';
+    client.query(query, [commentId, username], (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error deleting the comment');
+            return;
+        }
+        if (results.rows.length === 0) {
+            res.status(403).send('You are not allowed to delete this comment');
+            return;
+        }
+        //delete the comment
+        const deleteQuery = 'DELETE FROM comments WHERE comment_id = $1';
+        client.query(deleteQuery, [commentId], (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error deleting the comment');
+                return;
+            }
+            res.status(200).send('Comment deleted successfully');
+        });
+    });
+});
 
 const httpsOptions = {
     key: fs.readFileSync('certs/private.key'),

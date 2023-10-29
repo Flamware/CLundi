@@ -77,15 +77,10 @@ function createStorySection(story) {
     const content = createParagraph("content", story.content);
     storySection.appendChild(author);
     storySection.appendChild(content);
-    console.log("Adding story:", story);
-    //add comment button and text area
-    console.log("Adding comment button and text area");
-    console.log("Story id:", story.id);
-    console.log("Story author:", story.author);
-    console.log("Story content:", story.content);
-
     const replyButton = createCommentForm(story);
+    const deleteButton = createDeleteButton("story", story.id);
     storySection.appendChild(replyButton);
+    storySection.appendChild(deleteButton);
     return storySection;
 }
 
@@ -121,7 +116,6 @@ async function loadComments() {
 
             if (comments && comments.length > 0) {
                 comments.forEach(comment => {
-                    console.log("Adding comment:", comment);
                     if (!comment.parent_comment_id) {
                         const storySection = document.getElementById(comment.story_id);
                         const commentSection = createCommentSection(comment);
@@ -152,7 +146,9 @@ function createCommentSection(comment) {
     commentSection.appendChild(content);
     //add comment button and text area
     const replyButton = createCommentForm(comment);
+    const deleteButton = createDeleteButton("comment", comment.comment_id);
     commentSection.appendChild(replyButton);
+    commentSection.appendChild(deleteButton);
     return commentSection;
 }
 // Function to create a comment form
@@ -177,13 +173,13 @@ function createCommentForm(comment) {
 }
 // Function to send a POST request for submitting a comment
 async function submitComment(comment) {
-        //if it is a reply, get the parent comment id
+    //if it is a reply, get the parent comment id
 
-        const commentInput = document.getElementById("comment-input-" + comment.comment_id);
-        const content = commentInput.value;
-        //if comment.story_id is undefined, set storyId to comment.id
-        const storyId = comment.story_id ? comment.story_id : comment.id;
-        try {
+    const commentInput = document.getElementById("comment-input-" + comment.comment_id);
+    const content = commentInput.value;
+    //if comment.story_id is undefined, set storyId to comment.id
+    const storyId = comment.story_id ? comment.story_id : comment.id;
+    try {
         const response = await fetch(`/submit-comment`, {
             method: 'POST',
             headers: {
@@ -199,13 +195,73 @@ async function submitComment(comment) {
         console.error("An error occurred:", error);
     }
 }
+function createDeleteButton(type, id) {
+    const deleteButton = document.createElement("button");
+    deleteButton.className = "delete-button";
+    deleteButton.innerText = `Delete ${type.charAt(0).toUpperCase() + type.slice(1)}`; // Capitalize the type
+    deleteButton.setAttribute("data-type", type);
+    deleteButton.setAttribute("data-id", id);
+    return deleteButton;
+}
+function handleDelete(storyId) {
+    //check if it is a story or comment
+    const storySection = document.getElementById(storyId);
+    //get story type
+    const storyType = event.target.getAttribute("data-type");
+    console.log(storyId);
+    console.log(storyType);
+
+    if (storyType === "story") {
+        //request to delete story
+        fetch(`/delete-story/${storyId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    // The story was deleted successfully, you can then remove the story element from the DOM.
+                    refreshContent();
+                } else {
+                    // Handle any errors here, e.g., display an error message to the user.
+                    console.error('Failed to delete story');
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    } else {
+        //request to delete comment
+        fetch(`/delete-comment/${storyId}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (response.ok) {
+                    // The comment was deleted successfully, you can then remove the comment element from the DOM.
+                    refreshContent();
+                } else {
+                    // Handle any errors here, e.g., display an error message to the user.
+                    console.error('Failed to delete comment');
+                }
+            })
+            .catch(error => {
+                console.error('An error occurred:', error);
+            });
+    }
+}
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById("submit-story-form");
     form.addEventListener("submit", function (event) {
         event.preventDefault();
         submitStory();
     });
-
     const storiesContainer = document.getElementById("stories-container");
     refreshContent(storiesContainer);
+    document.addEventListener("click", function (event) {
+        //look for story id
+        const storyId = event.target.getAttribute("data-id");
+if (storyId) {
+        console.log("Story id: " + storyId);
+            handleDelete(storyId);
+        }
+    });
 });
+
