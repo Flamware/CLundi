@@ -3,60 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="/css/login.css"> <!-- Link to your CSS file -->
+    <title>Connexion</title>
+    <link rel="stylesheet" href="/css/login.css"> <!-- Lien vers votre fichier CSS -->
 </head>
 <body>
 
 <header class="header">
     <div class="ae">
         <a href="https://ae.utbm.fr/" >
-        <img src="/img/ae.png" alt="AE Logo">
+            <img src="/img/ae.png" alt="Logo AE">
         </a>
     </div>
     <div class="utbm">
         <a href="https://www.utbm.fr/" >
-        <img src="/img/utbm.svg">
+            <img src="/img/utbm.svg">
         </a>
     </div>
     <div class="utx">
         <a href="/" >
-        <img src="/img/utx.png" alt="UTX Main Logo">
+            <img src="/img/utx.png" alt="Logo Principal UTX">
         </a>
     </div>
     <div class="utx_text">
         <a href="/" >
-        <img src="/img/utx_text.png" alt="utx_logo">
+            <img src="/img/utx_text.png" alt="Logo utx">
         </a>
     </div>
     <div class="logout">
-        <!-- Logout Link -->
-        <a href="/logout">Logout</a>
+        <!-- Lien de déconnexion -->
+        <a href="/logout">Déconnexion</a>
     </div>
 </header>
 <main>
     <section id="login-form">
-        <h2>Login</h2>
+        <h2>Connexion</h2>
         <form action="/login" method="POST">
-            <label for="username">Username:</label>
+            <label for="username">Nom d'utilisateur :</label>
             <input type="text" id="username" name="username" required>
 
-            <label for="password">Password:</label>
+            <label for="password">Mot de passe :</label>
             <input type="password" id="password" name="password" required>
-            <button type="submit" id="login-button">Log In</button>
+            <button type="submit" id="login-button">Se connecter</button>
             <div id="error-message" style="color: red;"></div>
         </form>
         <form action="/register" method="GET">
-            <button type="submit" id="sign-up-button">Sign Up</button>
+            <button type="submit" id="sign-up-button">S'inscrire</button>
         </form>
     </section>
 </main>
 <footer>
     <div class="footer_contents">
-        <p>&copy; 2023 Clundi V1.7, Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
+        <p>&copy; 2023 Clundi V1.6.3, Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
     </div>
 </footer>
 <script src="../api/login.js"></script>
-<script>console.log("client.js loaded")</script>
+<script>console.log("client.js chargé")</script>
 </body>
 </html>
