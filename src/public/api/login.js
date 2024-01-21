@@ -3,10 +3,10 @@ async function login() {
     // Get the values from the form
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-
+    console.log(username + password);
     if (!username) {
         const errorMessageElement = document.getElementById("error-message");
-        errorMessageElement.innerText = "Username is required";
+        errorMessageElement.innerText = "Usernaafnme is required";
         return;
     }
 
