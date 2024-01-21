@@ -7,7 +7,7 @@ const http = require('http');
 const { client, connectDatabase } = require('./database.js'); // Import the database module
 const app = express();
 const portHTTP = 8080; // HTTP port
-const portHTTPS = 8443; // HTTPS port
+const portHTTPS = 8445; // HTTPS port
 const baseurl = `https://localhost:${portHTTPS}`;
 const projectDir = __dirname;
 
@@ -98,7 +98,6 @@ app.post('/login', async (req, res) => {
         const { rows } = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
 
         if (rows.length > 0) {
-            // Set the user information in the session
             req.session.isAuthenticated = true;
             req.session.username = username; // Set the user's username in the session
             res.status(200).json({ redirect: '/' });
@@ -305,13 +304,9 @@ app.delete('/delete-comment/:commentId', (req, res) => {
     });
 });
 
-const httpsOptions = {
-    key: fs.readFileSync('certs/private.key'),
-    cert: fs.readFileSync('certs/certificate.cer'),
-};
 
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer(httpsOptions, app);
+const httpsServer = https.createServer( app);
 
 httpServer.listen(portHTTP, () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
