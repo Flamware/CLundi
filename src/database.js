@@ -1,15 +1,17 @@
 const { Client } = require("pg");
 const fs = require("fs");
 const readline = require("readline");
+
 const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+    connectionString : process.env.DATABASE_URL,
     ssl: {
         rejectUnauthorized: false,
     }
 });
 
 async function connectDatabase() {
-    console.log("Connecting to the database");
+    console.log("Connectingqzd to the database with URL:", process.env.DATABASE_URL);
+
     try {
         await client.connect();
         console.log("Connected to the database");
@@ -17,5 +19,6 @@ async function connectDatabase() {
         console.error("Error connecting to the database:", error);
     }
 }
+
 exports.connectDatabase = connectDatabase;
 exports.client = client;

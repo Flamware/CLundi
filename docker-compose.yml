@@ -4,16 +4,19 @@ services:
     build:
       context: .
     environment:
-      - DATABASE_URL=postgresql://axel:X538CGS_PRIytjjx0ws4zw@punchy-dragon-11093.8nj.cockroachlabs.cloud:26257/clundi?sslmode=verify-full
+      - DATABASE_URL=${DATABASE_URL}
     image: flamware/cdocker:latest
     ports:
       - "8080:8080"
       - "8443:8443"
+    depends_on:
+      - cockroach-db
+
   cockroach-db:
     image: cockroachdb/cockroach:v21.1.8
+    command: ["start", "--insecure", "--listen-addr=0.0.0.0:26257", "--http-addr=0.0.0.0:8080"]
     ports:
       - "26257:26257"
-    command: start --insecure
     volumes:
       - ./cockroach-data:/cockroach/cockroach-data
 

@@ -12,6 +12,8 @@ const baseurl = `https://localhost:${portHTTPS}`;
 const projectDir = __dirname;
 
 connectDatabase();
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
+
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
