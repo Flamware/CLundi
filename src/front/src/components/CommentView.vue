@@ -3,45 +3,57 @@
     <div v-for="comment in comments" :key="comment.comment_id" class="comment">
       <span class="comment-author">{{ comment.author }}</span>
       <p class="comment-content">{{ comment.content }}</p>
-      <CommentSection v-if="comment.replies && comment.replies.length > 0" :comments="comment.replies"></CommentSection>
+
+      <!-- Ajouter la condition pour afficher le bouton delete -->
+      <DeleteCom v-if="isCurrentUser(comment.author)" @delete="handleDelete" />
+
+      <ReplyForm @reply="handleReply" />
+      <CommentSection :comments="getRepliesByCommentId(comment.comment_id)"></CommentSection>
     </div>
   </div>
 </template>
 
 <script>
+import ReplyForm from './ReplyForm.vue';
+import DeleteCom from '../components/DeleteButton.vue';
+
 export default {
   name: 'CommentSection',
+  components: {
+    ReplyForm,
+    DeleteCom,
+  },
   props: {
     comments: {
       type: Array,
-      required: true
-    }
-  },
-  mounted() {
-    console.log(this.comments);
+      required: true,
+    },
+    currentUser: {
+      type: String, // ou tout autre type d'identifiant d'utilisateur
+      required: true,
+    },
   },
   methods: {
-    // Recursive method to get replies by comment id
     getRepliesByCommentId(parentCommentId) {
-      const filteredReplies = [];
-      for (let i = 0; i < this.comments.length; i++) {
-        const reply = this.comments[i];
-
-        if (reply.parent_comment_id === parentCommentId) {
-          const clonedReply = { ...reply };
-          clonedReply.replies = this.getRepliesByCommentId(reply.comment_id);
-          filteredReplies.push(clonedReply);
-        }
-      }
-      return filteredReplies;
-    }
-  }
+      return this.comments.filter(comment => comment.parent_comment_id === parentCommentId);
+    },
+    handleReply(replyContent) {
+      console.log('Replying to comment with content:', replyContent);
+    },
+    handleDelete() {
+      // Implémentez la logique de suppression ici
+      console.log('Deleting comment...');
+    },
+    isCurrentUser(commentAuthor) {
+      return commentAuthor === this.currentUser;
+    },
+  },
 };
 </script>
 
 <style scoped>
 .comment {
-  background-color: #fff;
+  background-color: #f0ece5;
   border-radius: 10px;
   padding: 10px;
   margin-bottom: 10px;

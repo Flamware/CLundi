@@ -1,4 +1,5 @@
 <template>
+  <meta charset="UTF-8">
   <div class="login">
     <header-view></header-view>
     <main>
@@ -28,10 +29,10 @@
 </template>
 
 <script>
-// main.js or main.ts
-import axios from '@/axios-conf'; // Update the import path
-import HeaderView from '@/components/HeaderView.vue'
-import FooterView from "@/components/FooterView.vue";
+import axios from '../axios-conf.js';
+import HeaderView from '../components/HeaderView.vue';
+import FooterView from "../components/FooterView.vue";
+
 export default {
   name: 'LoginView',
   components: {
@@ -46,14 +47,12 @@ export default {
     };
   },
   methods: {
-    // Example login method in your LoginView component
     login() {
       axios.post('/login', {
         username: this.username,
         password: this.password
       })
           .then((response) => {
-            // Assuming the server returns a token upon successful login
             const token = response.data.token;
 
             // Store the token in localStorage
@@ -66,13 +65,13 @@ export default {
             this.errorMessage = error.response.data.error;
           });
     },
-      navigateToSignUp() {
-        this.$router.push({ name: 'sign-in' }); // Use the correct route name
-      }
+    navigateToSignUp() {
+      this.$router.push({ name: 'sign-in' });
     }
+  }
 }
-
 </script>
+
 
 <style scoped>
 html, body {
@@ -87,16 +86,20 @@ html, body {
 }
 
 main {
-  flex: 1;
+  flex: 1; /* Add this line */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
 }
 
 #login-form {
   text-align: center;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin-top: 15px;
 }
 
 h2 {
@@ -110,17 +113,6 @@ form {
 
 .form-group {
   margin-bottom: 20px;
-}
-
-.label {
-  display: block;
-  margin-bottom: 10px;
-  text-align: left;
-}
-
-.input-group {
-  display: flex;
-  flex-direction: column;
 }
 
 input[type="text"],

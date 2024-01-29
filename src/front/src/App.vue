@@ -1,17 +1,20 @@
 <template>
-  <router-view></router-view>
+  <div class="background-container">
+    <router-view></router-view>
+  </div>
 </template>
 
 <style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.background-container {
+  background-image: url('./assets/1014.jpg'); /* Adjust the path based on your project structure */
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+
 }
-.vue .logo:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
+
+
+
 </style>
 
 <script setup>

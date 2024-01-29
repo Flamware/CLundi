@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../views/LoginView.vue';
-import { isAuthenticated } from '@/auth.js';
+import Home from '../views/HomeView.vue';
+import Register from '../views/RegisterView.vue';
+
+import { isAuthenticated } from '../auth.js'
 
 const routes = [
   {
@@ -12,13 +15,13 @@ const routes = [
   {
     path: '/sign-in',
     name: 'sign-in',
-    component: () => import(/* webpackChunkName: "signIn" */ '../views/RegisterView.vue'),
-  },
+    component: Register,
+    },
 
   {
     path: '/',
     name: 'home',
-    component: () => import(/* webpackChunkName: "dashboard" */ '../views/HomeView.vue'),
+    component: Home,
     beforeEnter: (to, from, next) => {
       if (isAuthenticated()) {
         // User is authenticated, allow access to the home page

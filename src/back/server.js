@@ -8,32 +8,61 @@ const { client, connectDatabase } = require('./database.js'); // Import the data
 const app = express();
 const portHTTP = 8080; // HTTP port
 const portHTTPS = 8445; // HTTPS port
-const baseurl = `https://localhost:${portHTTPS}`;
-const projectDir = __dirname;
 require('dotenv').config();
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+
 app.use(cors());
 
 connectDatabase();
 
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
-
-// Use the express-session middleware
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
+    cookie: { maxAge: 3600000 } // 1 hour expiration time
 }));
 
-// Middleware to check if the user is authenticated
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+app.use((req, res, next) => {
+    res.charset = 'utf-8';
+    next();
+});
+const verifyToken = (req, res, next) => {
+    const token = req.headers.authorization;
+    console.log('Verifying JWT token:', token);
+    if (!token) {
+        return res.status(403).json({ error: 'No token provided' });
+    }
+    if (!token.startsWith('Bearer ')) {
+        return res.status(401).json({ error: 'Invalid token format' });
+    }
+
+    const tokenWithoutBearer = token.slice(7);
+
+    jwt.verify(tokenWithoutBearer, '246887855145@Clundi', (err, decoded) => {
+        if (err) {
+            console.log('Failed to authenticate token:', err);
+            return res.status(401).json({ error: 'Failed to authenticate token' });
+        }
+
+        // Set both userId and username in the request
+        req.userId = decoded.userId;
+        req.username = decoded.username;
+
+        // Set username in the session
+        req.session.username = decoded.username;
+
+        next();
+    });
+};
+
+
 function requireAuthentication(req, res, next) {
     if (req.session.isAuthenticated) {
-        // User is authenticated, allow access to the main page
         next();
     } else {
-        // User is not authenticated, redirect to the login page or display an error
         res.redirect('/login');
     }
 }
@@ -72,37 +101,22 @@ app.post('/register', async (req, res) => {
         res.status(500).send('Error inserting the user into the database');
     }
 });
-
-
-
-
 app.get('/register', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'register.html'));
 });
 
-// Route to handle user login
+
 app.post('/login', async (req, res) => {
-    const { username, password } = req.body;
-    if (!username) {
-        res.status(400).json({ error: 'Username is required' });
-        console.log("Username is required");
-        return;
-    }
-
-    if (!password) {
-        res.status(400).json({ error: 'Password is required' });
-        console.log("Password is required");
-        return;
-    }
-
     try {
-        const { rows } = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
+        const { username, password } = req.body;
 
+        const { rows } = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password]);
         if (rows.length > 0) {
-            req.session.isAuthenticated = true;
-            req.session.username = username; // Set the user's username in the session
-            res.status(200).json({ redirect: '/' });
-            console.log("Login successful for user " + username);
+            req.session.username = username; // Set the username in the session
+            const token = jwt.sign({ userId: rows[0].id, username }, '246887855145@Clundi', { expiresIn: '1h' });
+            console.log('Generated JWT token:', token);
+            console.log('username: ' + req.session.username);
+            res.status(200).json({ token });
         } else {
             res.status(400).json({ error: 'Invalid username or password' });
         }
@@ -113,8 +127,8 @@ app.post('/login', async (req, res) => {
 });
 
 app.post('/submit-story', async (req, res) => {
-
     const { story } = req.body;
+    const author = req.session.username; // Define and use the author
     console.log("Story: " + story);
     if (!story) {
         res.status(400).json({ error: 'Content is required' });
@@ -128,22 +142,16 @@ app.post('/submit-story', async (req, res) => {
         console.error(error);
         res.status(500).json({ error: 'Error submitting the story' });
     }
-
 });
 
-// Route to submit a comment
+
 app.post('/submit-comment', requireAuthentication, async (req, res) => {
-
     const { storyId, comment, parentCommentId } = req.body;
-
     if (!storyId || !comment) {
         res.status(400).json({ error: 'Story ID and comment content are required' });
         return;
     }
-
-    // Use the author from the session data
     const author = req.session.username;
-
     try {
         // Log the storyId here for debugging
         console.log('Received storyId for comment:', storyId);
@@ -168,11 +176,6 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
         res.status(500).json({ error: 'Error submitting the comment' });
     }
 });
-
-
-
-
-// Route to retrieve comments for a story
 app.get('/load-comments', async (req, res) => {
     try {
         // Query the database to retrieve all comments
@@ -184,6 +187,7 @@ app.get('/load-comments', async (req, res) => {
         res.status(500).json({ error: 'Error fetching comments' });
     }
 });
+
 app.get('/load-replies', async (req, res) => {
     try {
         // Query in the database comments that have a parent_comment_id
@@ -219,10 +223,6 @@ try {
         res.status(500).json({ error: 'Error fetching stories and comments' });
     }
 });
-
-
-
-
 app.get('/load-stories', async (req, res) => {
     try {
         const results = await client.query('SELECT story_id, author, content FROM stories');
@@ -245,33 +245,39 @@ app.get('/load-stories', async (req, res) => {
     }
 });
 
-app.delete('/delete-story/:storyId', (req, res) => {
+app.delete('/delete-story/:storyId', verifyToken, (req, res) => {
     const storyId = req.params.storyId;
     const username = req.session.username;
-    const query = 'SELECT * FROM stories WHERE story_id = $1 AND author = $2';
+
+    const authToken = req.headers.authorization;
+
+    console.log('Received JWT token:', authToken);
+
+    console.log('Session:', req.session); // Add this line
+
+    console.log('Deleting story with ID:', storyId, 'by user:', username);
+
+    const query = 'DELETE FROM stories WHERE story_id = $1 AND author = $2 RETURNING *';
     client.query(query, [storyId, username], (err, results) => {
         if (err) {
             console.error(err);
             res.status(500).send('Error deleting the story');
             return;
         }
+
+        console.log('Deleted rows:', results.rows);
+
         if (results.rows.length === 0) {
+            console.log('User not allowed to delete this story');
             res.status(403).send('You are not allowed to delete this story');
             return;
         }
-        //delete the story
-        const deleteQuery = 'DELETE FROM stories WHERE story_id = $1';
-        client.query(deleteQuery, [storyId], (err, results) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error deleting the story');
-                return;
-            }
-            res.status(200).send('Story deleted successfully');
-        });
+
+        console.log('Story deleted successfully');
+        res.status(200).send('Story deleted successfully');
     });
 });
-app.delete('/delete-comment/:commentId', (req, res) => {
+app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
     const commentId = req.params.commentId;
     const username = req.session.username;
     const query = 'SELECT * FROM comments WHERE comment_id = $1 AND author = $2';
