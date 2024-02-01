@@ -95,11 +95,12 @@ main {
 
 #login-form {
   text-align: center;
-  background-color: #f0f0f0;
+  background-color: #b6bbc4;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   margin-top: 15px;
+  color: black;
 }
 
 h2 {
@@ -134,7 +135,7 @@ input[type="password"] {
 }
 
 button {
-  background-color: #333;
+  background-color: #0c2d57;
   color: white;
   padding: 10px 20px;
   border: none;

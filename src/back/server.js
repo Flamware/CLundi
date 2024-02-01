@@ -31,7 +31,6 @@ app.use((req, res, next) => {
 });
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization;
-    console.log('Verifying JWT token:', token);
     if (!token) {
         return res.status(403).json({ error: 'No token provided' });
     }
@@ -126,7 +125,7 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/submit-story', async (req, res) => {
+app.post('/submit-story',verifyToken , async (req, res) => {
     const { story } = req.body;
     const author = req.session.username; // Define and use the author
     console.log("Story: " + story);
@@ -144,28 +143,26 @@ app.post('/submit-story', async (req, res) => {
     }
 });
 
+app.post('/submit-comment', verifyToken, async (req, res) => {
+    const { storyId, content, parentCommentId } = req.body;
+    console.log("StoryId: " + storyId);
+    console.log("Comment: " + content);
+    console.log("ParentCommentId: " + parentCommentId);
 
-app.post('/submit-comment', requireAuthentication, async (req, res) => {
-    const { storyId, comment, parentCommentId } = req.body;
-    if (!storyId || !comment) {
+    if (!storyId || !content) {
         res.status(400).json({ error: 'Story ID and comment content are required' });
         return;
     }
     const author = req.session.username;
     try {
-        // Log the storyId here for debugging
-        console.log('Received storyId for comment:', storyId);
         const query = parentCommentId
             ? 'INSERT INTO comments (story_id, author, content, parent_comment_id) VALUES ($1, $2, $3, $4)'
             : 'INSERT INTO comments (story_id, author, content) VALUES ($1, $2, $3)';
         //print $1, $2, $3, $4
-        console.log("Query: " + query);
-        console.log("Params: " + storyId + ", " + author + ", " + comment + ", " + parentCommentId);
-
 
         const params = parentCommentId
-            ? [storyId, author, comment, parentCommentId]
-            : [storyId, author, comment];
+            ? [storyId, author, content, parentCommentId]
+            : [storyId, author, content];
 
         await client.query(query, params);
         console.log('Comment submitted successfully');
@@ -176,10 +173,41 @@ app.post('/submit-comment', requireAuthentication, async (req, res) => {
         res.status(500).json({ error: 'Error submitting the comment' });
     }
 });
+
 app.get('/load-comments', async (req, res) => {
     try {
-        // Query the database to retrieve all comments
-        const results = await client.query('SELECT comment_id, story_id, author, content, parent_comment_id FROM comments');
+        // Query the database to retrieve all comments with hierarchical structure
+        const results = await client.query(`
+            WITH RECURSIVE comment_hierarchy AS (
+                SELECT
+                    comment_id,
+                    story_id,
+                    author,
+                    content,
+                    parent_comment_id,
+                    1 AS level,
+                    ARRAY[]::text[] AS children -- Initialize an empty array for children
+                FROM
+                    comments
+                WHERE
+                    parent_comment_id IS NULL
+                UNION ALL
+                SELECT
+                    c.comment_id,
+                    c.story_id,
+                    c.author,
+                    c.content,
+                    c.parent_comment_id,
+                    ch.level + 1,
+                    ch.children || c.comment_id::text -- Convert comment_id to text for concatenation
+                FROM
+                    comments c
+                        JOIN
+                    comment_hierarchy ch ON c.parent_comment_id = ch.comment_id
+            )
+            SELECT * FROM comment_hierarchy;
+        `);
+
         // Send the results to the client as a JSON response
         res.status(200).json({ comments: results.rows });
     } catch (error) {
@@ -187,6 +215,8 @@ app.get('/load-comments', async (req, res) => {
         res.status(500).json({ error: 'Error fetching comments' });
     }
 });
+
+
 
 app.get('/load-replies', async (req, res) => {
     try {
@@ -227,7 +257,7 @@ app.get('/load-stories', async (req, res) => {
     try {
         const results = await client.query('SELECT story_id, author, content FROM stories');
         const stories = results.rows.map(row => ({
-            id: row.story_id,
+            story_id: row.story_id,
             author: row.author,
             content: row.content
         }));
@@ -248,13 +278,7 @@ app.get('/load-stories', async (req, res) => {
 app.delete('/delete-story/:storyId', verifyToken, (req, res) => {
     const storyId = req.params.storyId;
     const username = req.session.username;
-
     const authToken = req.headers.authorization;
-
-    console.log('Received JWT token:', authToken);
-
-    console.log('Session:', req.session); // Add this line
-
     console.log('Deleting story with ID:', storyId, 'by user:', username);
 
     const query = 'DELETE FROM stories WHERE story_id = $1 AND author = $2 RETURNING *';
@@ -267,7 +291,7 @@ app.delete('/delete-story/:storyId', verifyToken, (req, res) => {
 
         console.log('Deleted rows:', results.rows);
 
-        if (results.rows.length === 0) {
+        if (results.rows.length === 0 && username !== 'Karaï') {
             console.log('User not allowed to delete this story');
             res.status(403).send('You are not allowed to delete this story');
             return;
@@ -287,7 +311,8 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
             res.status(500).send('Error deleting the comment');
             return;
         }
-        if (results.rows.length === 0) {
+        if (results.rows.length === 0 && username !== 'Karaï') {
+            console.log(username);
             res.status(403).send('You are not allowed to delete this comment');
             return;
         }

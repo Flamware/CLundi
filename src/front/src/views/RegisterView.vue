@@ -86,12 +86,14 @@ body {
 }
 
 main {
-  max-width: 800px;
+  max-width: 400px;
   margin: 0 auto;
+  margin-top: 20px;
   padding: 20px;
-  background-color: #fff;
+  background-color: #b6bbc4;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
+  color: black;
 }
 
 h2 {
@@ -100,7 +102,7 @@ h2 {
 }
 
 form {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 label {
@@ -113,14 +115,15 @@ input[type="text"],
 input[type="password"] {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 16px;
+  color: black;
 }
 
 button {
-  background-color: #333;
+  background-color: #0c2d57;
   color: white;
   padding: 10px 20px;
   border: none;

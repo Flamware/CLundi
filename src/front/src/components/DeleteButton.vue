@@ -17,6 +17,7 @@ export default {
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .delete-button:hover {
