@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - main
+      - V2
 
 jobs:
   deploy:
@@ -14,12 +14,12 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t CDocker .
+        run: docker build -t clundi_vue .
 
       - name: Push Docker image to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push your-docker-image-name
+          docker push flamware/clundi_vue:latest
 
       - name: SSH into VPS and update the application
         uses: appleboy/ssh-action@master
@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull CDocker
-            docker stop CDocker || true
-            docker rm CDocker || true
-            docker run -d -p 3000:3000 --name your-container-name your-docker-image-name
+            docker pull flamware/clundi_vue:latest
+            docker stop clundi_vue || true
+            docker rm clundi_vue || true
+            docker run -d -p 8081:4173 --name clundi_vue_container clundi_vue
