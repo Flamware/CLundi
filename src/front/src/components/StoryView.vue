@@ -72,10 +72,9 @@ export default {
       return isAuthenticated();
     },
     isOwner() {
-      const authenticatedUsername = getUserName().normalize();
-      const storyAuthor = this.story.author.normalize();
+      const authenticatedUsername = getUserName();
       const isKaraOwner = authenticatedUsername === 'KaraÃ¯'.normalize();
-      return this.isAuthenticated && (isKaraOwner || (this.story && storyAuthor === authenticatedUsername));
+      return isKaraOwner || this.story.author === authenticatedUsername;
     },
   },
 };

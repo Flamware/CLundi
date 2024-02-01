@@ -23,7 +23,7 @@ const routes = [
     name: "AdminPage",
     component: AdminPage,
     beforeEnter: (to, from, next) => {
-      if (isAuthenticated()) {
+      if (isAuthenticated()&&getUserName()=='KaraÃ¯') {
         // User is authenticated, allow access to the home page
         console.log('User is authenticated');
         next();

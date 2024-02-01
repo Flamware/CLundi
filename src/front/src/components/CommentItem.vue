@@ -4,7 +4,7 @@
     <p class="comment-content">{{ comment.content }}</p>
     <div class="button-container">
       <ReplyForm :story_id="story_id" :parent_comment_id="comment.comment_id" />
-      <DeleteCom @delete="handleDelete" />
+      <DeleteCom v-if="isOwner()" @delete="handleDelete" />
     </div>
     <div>
       <CommentItem
@@ -23,6 +23,7 @@
 import ReplyForm from './ReplyForm.vue';
 import DeleteCom from '../components/DeleteButton.vue';
 import axios from "../axios-conf.js";
+import {getUserName} from "../auth.js";
 export default {
   name: 'CommentItem',
   components: {
@@ -50,6 +51,7 @@ export default {
     },
     handleDelete() {
       const authToken = localStorage.getItem('token');
+
       axios.delete(`/delete-comment/${this.comment.comment_id}`, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -63,7 +65,13 @@ export default {
             console.error('Error deleting comment:', error);
           });
     },
-  },
+      isOwner() {
+        const authenticatedUsername = getUserName();
+        const isKaraOwner = authenticatedUsername === 'KaraÃ¯'.normalize();
+        return isKaraOwner || this.comment.author === authenticatedUsername;
+      },
+
+    },
 };
 </script>
 
