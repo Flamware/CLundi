@@ -1,7 +1,7 @@
 <template>
 <footer>
 <div class="footer_contents">
-  <p>&copy; 2024 Clundi V1.7 Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
+  <p>&copy; 2024 Clundi V2.0 Karaï (Antunes Axel) - <a href="https://github.com/Flamware/CLundi">GitHub</a></p>
 </div>
 </footer>
 </template>
