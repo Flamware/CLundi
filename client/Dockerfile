@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Expose port 8080
-EXPOSE 8080
+EXPOSE 4173
 
 # Command to run the Vite app
 CMD ["npm", "run", "serve"]
