@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     loadStories() {
-      axios.get('http://localhost:8080/load-stories')
+      axios.get('/load-stories')
           .then((response) => {
             this.stories = response.data.stories;
           })

@@ -32,4 +32,4 @@ jobs:
             docker pull flamware/clundi_vue:latest
             docker stop clundi_vue || true
             docker rm clundi_vue || true
-            docker run -d -p 8081:4173 --name clundi_vue_container clundi_vue
+            docker run -d -p 8080:4173 --name clundi_vue_container clundi_vue
