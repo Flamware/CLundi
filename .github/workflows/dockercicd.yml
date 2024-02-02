@@ -14,8 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t clundi_vue ./client
-
+        run: |
+          cd client  # Change directory to the client folder
+          docker build -t clundi_vue .
+          cd ..  # Change back to the original directory
 
       - name: Push Docker image to Docker Hub
         run: |
@@ -32,4 +34,4 @@ jobs:
             docker pull clundi_vue
             docker stop clundi_vue || true
             docker rm clundi_vue || true
-            docker run -p 8080:4173 clundi_vue
+            docker run -d -p 8080:4173 --name clundi_vue clundi_vue
