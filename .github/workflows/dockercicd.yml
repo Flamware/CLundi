@@ -14,7 +14,8 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build Docker image
-        run: docker build -t clundi_vue .
+        run: docker build -t clundi_vue ./client
+
 
       - name: Push Docker image to Docker Hub
         run: |
