@@ -20,4 +20,4 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull flamware/clundi_vue:latest 
+            docker pull flamware/clundi_vue:latest
