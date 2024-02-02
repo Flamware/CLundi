@@ -20,7 +20,7 @@ jobs:
           cat /tmp/private_key
 
       - name: Build Docker image
-        run: docker build -t clundi_vue .
+        run: docker build -t clundi_vue ./src
 
       - name: Push Docker image to Docker Hub
         run: |
