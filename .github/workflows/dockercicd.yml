@@ -29,7 +29,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull flamware/clundi_vue:latest
+            echo "Debug: Contents of SSH_PRIVATE_KEY"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /tmp/private_key
+            cat /tmp/private_key
+            
+            docker pull ***/clundi_vue:latest
             docker stop clundi_vue || true
             docker rm clundi_vue || true
             docker run -d -p 8081:4173 --name clundi_vue_container clundi_vue
