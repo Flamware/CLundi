@@ -15,14 +15,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd client  # Change directory to the client folder
+          cd client 
           docker build -t clundi_vue .
-          cd ..  # Change back to the original directory
+          cd ..  
 
       - name: Push Docker image to Docker Hub
         run: |
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push clundi_vue
+          docker push flamware/clundi_vue
+
 
       - name: SSH into VPS and update the application
         uses: appleboy/ssh-action@master
