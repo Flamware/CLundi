@@ -13,17 +13,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build Docker image
+      - name: Build and Push Docker image
         run: |
-          cd client 
-          docker build -t clundi_vue .
-          cd ..  
-
-      - name: Push Docker image to Docker Hub
-        run: |
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-          docker push flamware/clundi_vue
-
+          docker build -t flamware/clundi_vue ./client
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
+          docker tag flamware/clundi_vue:latest flamware/clundi_vue:latest
+          docker push flamware/clundi_vue:latest
 
       - name: SSH into VPS and update the application
         uses: appleboy/ssh-action@master
@@ -32,7 +27,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull clundi_vue
+            docker pull flamware/clundi_vue:latest
             docker stop clundi_vue || true
             docker rm clundi_vue || true
-            docker run -d -p 8080:4173 --name clundi_vue clundi_vue
+            docker run -d -p 8080:4173 --name clundi_vue flamware/clundi_vue:latest
