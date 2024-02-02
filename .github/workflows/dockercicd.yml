@@ -15,7 +15,7 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          docker build -t flamware/clundi_vue ./client
+          docker build -t flamware/clundi_vue ./client 
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
           docker tag flamware/clundi_vue:latest flamware/clundi_vue:latest
           docker push flamware/clundi_vue:latest
