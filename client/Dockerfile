@@ -1,10 +1,10 @@
-# Use the official Node image as base
-FROM node:16
+# Use a lightweight base image
+FROM node:16-alpine as build
 
 # Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the container
+# Copy package.json and package-lock.json to leverage Docker cache
 COPY package*.json ./
 
 # Install dependencies
@@ -13,8 +13,17 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose port 8080
-EXPOSE 4173
+# Build the Vue app for production
+RUN npm run build
 
-# Command to run the Vite app
-CMD ["npm", "run", "serve"]
+# Use a smaller base image for the final stage
+FROM nginx:alpine
+
+# Copy built artifacts from the build stage to the nginx public directory
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Expose port 80
+EXPOSE 80
+
+# Command to run the nginx server
+CMD ["nginx", "-g", "daemon off;"]
