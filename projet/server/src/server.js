@@ -5,7 +5,7 @@ const session = require('express-session');
 const http = require('http');
 const { client, connectDatabase } = require('./database.js'); // Import the database module
 const app = express();
-const portHTTP = 8080; // HTTP port
+const portHTTP = 3000; // HTTP port
 const portHTTPS = 8445; // HTTPS port
 require('dotenv').config();
 const cors = require('cors');
@@ -22,7 +22,6 @@ app.use(session({
     cookie: { maxAge: 3600000 } // 1 hour expiration time
 }));
 
-app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use((req, res, next) => {
     res.charset = 'utf-8';

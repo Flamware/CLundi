@@ -2,7 +2,7 @@
   "name": "CLundi",
   "version": "1.0.0",
   "description": "ralez, c'est gratuit :)",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "start": "node /home/axel/my-node-apps/CLundi/src/public/server.js"
   },

@@ -3,7 +3,7 @@ name: Deploy to VPS
 on:
   push:
     branches:
-      - master
+      - V2
 
 jobs:
   deploy:
@@ -15,14 +15,14 @@ jobs:
 
       - name: Build and Push Docker image for clundi_vue
         run: |
-          docker build -t flamware/clundi_vue ./client 
+          docker build -t flamware/clundi_vue ./projet/client 
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
           docker tag flamware/clundi_vue:latest flamware/clundi_vue:latest
           docker push flamware/clundi_vue:latest
 
       - name: Build and Push Docker image for clundi_api
         run: |
-          docker build -t flamware/clundi_api ./server
+          docker build -t flamware/clundi_api ./projet/server
           echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
           docker tag flamware/clundi_api:latest flamware/clundi_api:latest
           docker push flamware/clundi_api:latest
