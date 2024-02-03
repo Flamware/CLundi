@@ -1,5 +1,5 @@
-# Use a lightweight base image
-FROM node:14 as build
+# Use a lightweight base image for the build stage
+FROM node:16 as build
 # Set the working directory
 WORKDIR /app
 
