@@ -164,4 +164,9 @@ main h2 {
 #submit-button:hover {
   background-color: #242038;
 }
+@media (max-width: 768px) {
+  #stories-container {
+    width: 100%; /* Set width to 100% for smaller screens */
+  }
+}
 </style>

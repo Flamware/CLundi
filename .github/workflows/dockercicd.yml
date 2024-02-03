@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - V2
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,19 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Build and Push Docker image for clundi_api
+      - name: Build and Push Docker images
         run: |
-          docker build -t flamware/clundi_api ./projet/server
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
-          docker tag flamware/clundi_api:latest flamware/clundi_api:latest
-          docker push flamware/clundi_api:latest
-
-      - name: Build and Push Docker image for clundi_vue
-        run: |
-          docker build -t flamware/clundi_vue ./projet/client 
-          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
-          docker tag flamware/clundi_vue:latest flamware/clundi_vue:latest
-          docker push flamware/clundi_vue:latest
+          for service in clundi_api clundi_vue; do
+            docker build -t flamware/$service ./projet/$service
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u flamware --password-stdin
+            docker push flamware/$service:latest
+          done
 
       - name: SSH into VPS and update clundi.fr
         uses: appleboy/ssh-action@master
@@ -33,12 +28,11 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            docker pull flamware/clundi_vue:latest
-            docker stop clundi_vue || true
-            docker rm clundi_vue || true
-            docker run -d -p 8080:80 --name clundi_vue flamware/clundi_vue:latest
-            docker pull flamware/clundi_api:latest
-            docker stop clundi_api || true
-            docker rm clundi_api || true
-            docker run -d -p 3000:3000 -p 8445:8445 --name clundi_api flamware/clundi_api:latest
+            for service in clundi_vue clundi_api; do
+              docker pull flamware/$service:latest
+              docker stop $service || true
+              docker rm $service || true
+              docker run -d -p 8080:80 --name $service flamware/$service:latest
+            done
+
             docker logs -f clundi_api
