@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const https = require('https');
 const session = require('express-session');
 const http = require('http');
 const { client, connectDatabase } = require('./database.js'); // Import the database module
@@ -328,12 +327,8 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
 
 
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer( app);
 
 httpServer.listen(portHTTP, () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
 });
 
-httpsServer.listen(portHTTPS, () => {
-    console.log(`HTTPS Server is running on port ${portHTTPS}`);
-});
