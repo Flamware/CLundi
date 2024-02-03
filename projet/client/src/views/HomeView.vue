@@ -168,5 +168,9 @@ main h2 {
   #stories-container {
     width: 100%; /* Set width to 100% for smaller screens */
   }
+  #submit-story-form textarea {
+    width: 83%; /* Adjust the width to 100% for smaller screens */
+  }
 }
+
 </style>
