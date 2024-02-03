@@ -38,14 +38,6 @@ jobs:
             docker stop clundi_vue || true
             docker rm clundi_vue || true
             docker run -d -p 8080:80 --name clundi_vue flamware/clundi_vue:latest
-
-      - name: SSH into VPS and update clundi_api
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
             docker pull flamware/clundi_api:latest
             docker stop clundi_api || true
             docker rm clundi_api || true
