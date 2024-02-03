@@ -9,16 +9,17 @@ const portHTTP = 3000; // HTTP port
 const portHTTPS = 8445; // HTTPS port
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
-
+const cors = require('cors');
 
 connectDatabase();
-
 app.use(session({
     secret: 'your-secret-key',
     resave: false,
     saveUninitialized: true,
     cookie: { maxAge: 3600000 } // 1 hour expiration time
 }));
+
+app.use(cors());
 
 app.use(express.json());
 app.use((req, res, next) => {
