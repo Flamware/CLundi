@@ -8,10 +8,8 @@ const app = express();
 const portHTTP = 3000; // HTTP port
 const portHTTPS = 8445; // HTTPS port
 require('dotenv').config();
-const cors = require('cors');
 const jwt = require('jsonwebtoken');
 
-app.use(cors());
 
 connectDatabase();
 
