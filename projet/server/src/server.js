@@ -10,11 +10,9 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const fs = require('fs');
-const privateKey = fs.readFileSync('../server-key.pem', 'utf8');
-const certificate = fs.readFileSync('../server-cert.pem', 'utf8');
+
 const ip = require('ip');
 
-const credentials = { key: privateKey, cert: certificate };
 connectDatabase();
 app.use(session({
     secret: 'your-secret-key',
@@ -333,16 +331,10 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
 
 
 const httpServer = http.createServer(app);
-const httpsServer = require('https').createServer(credentials, app);
 
 
 
 httpServer.listen(portHTTP, () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
-    console.log(`Server IP: ${ip.address()}`); // Print the local IP address
-});
-
-httpsServer.listen(portHTTPS, () => {
-    console.log(`HTTPS Server is running on port ${portHTTPS}`);
     console.log(`Server IP: ${ip.address()}`); // Print the local IP address
 });
