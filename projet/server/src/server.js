@@ -20,7 +20,11 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 3600000 } // 1 hour expiration time
 }));
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:8080',
+    credentials: true,
+}));
+
 
 
 app.use(express.json());
@@ -66,7 +70,7 @@ function requireAuthentication(req, res, next) {
 }
 
 
-app.post('/register', async (req, res) => {
+app.post('/api/register', async (req, res) => {
     const { username, password, email, confirmPassword } = req.body; // Added 'email'
 
     if (!username) {
@@ -99,17 +103,17 @@ app.post('/register', async (req, res) => {
         res.status(500).send('Error inserting the user into the database');
     }
 });
-app.get('/register', async (req, res) => {
+app.get('/api//register', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'register.html'));
 });
 
-app.get('/login', async (req, res) => {
+app.get('/api/login', async (req, res) => {
     console.log('Login page requested');
     //respond 200 OK
     res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
 });
 
-app.post('/api/login', async (req, res) => {
+app.post('/api/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
@@ -129,7 +133,7 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-app.post('/submit-story',verifyToken , async (req, res) => {
+app.post('/api/submit-story',verifyToken , async (req, res) => {
     const { story } = req.body;
     const author = req.session.username; // Define and use the author
     console.log("Story: " + story);
@@ -147,7 +151,7 @@ app.post('/submit-story',verifyToken , async (req, res) => {
     }
 });
 
-app.post('/submit-comment', verifyToken, async (req, res) => {
+app.post('/api/submit-comment', verifyToken, async (req, res) => {
     const { storyId, content, parentCommentId } = req.body;
     console.log("StoryId: " + storyId);
     console.log("Comment: " + content);
@@ -178,7 +182,7 @@ app.post('/submit-comment', verifyToken, async (req, res) => {
     }
 });
 
-app.get('/load-comments', async (req, res) => {
+app.get('/api/load-comments', async (req, res) => {
     try {
         // Query the database to retrieve all comments with hierarchical structure
         const results = await client.query(`
@@ -222,7 +226,7 @@ app.get('/load-comments', async (req, res) => {
 
 
 
-app.get('/load-replies', async (req, res) => {
+app.get('/api/load-replies', async (req, res) => {
     try {
         // Query in the database comments that have a parent_comment_id
         const results = await client.query('SELECT comment_id, story_id, author, content, parent_comment_id FROM comments WHERE parent_comment_id IS NOT NULL');
@@ -235,7 +239,7 @@ app.get('/load-replies', async (req, res) => {
 });
 
 
-app.get('/load-stories-and-comments', async (req, res) => {
+app.get('/api/load-stories-and-comments', async (req, res) => {
     try {
         // Query the database to retrieve all stories
         const results = await client.query('SELECT story_id, author, content FROM stories');
@@ -257,7 +261,7 @@ app.get('/load-stories-and-comments', async (req, res) => {
         res.status(500).json({ error: 'Error fetching stories and comments' });
     }
 });
-app.get('/load-stories', async (req, res) => {
+app.get('/api/load-stories', async (req, res) => {
     try {
         const results = await client.query('SELECT story_id, author, content FROM stories');
         const stories = results.rows.map(row => ({
@@ -279,7 +283,7 @@ app.get('/load-stories', async (req, res) => {
     }
 });
 
-app.delete('/delete-story/:storyId', verifyToken, (req, res) => {
+app.delete('/api/delete-story/:storyId', verifyToken, (req, res) => {
     const storyId = req.params.storyId;
     const username = req.session.username;
     const authToken = req.headers.authorization;
@@ -305,7 +309,7 @@ app.delete('/delete-story/:storyId', verifyToken, (req, res) => {
         res.status(200).send('Story deleted successfully');
     });
 });
-app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
+app.delete('/api/delete-comment/:commentId', verifyToken, (req, res) => {
     const commentId = req.params.commentId;
     const username = req.session.username;
     const query = 'SELECT * FROM comments WHERE comment_id = $1 AND author = $2';
