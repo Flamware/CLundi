@@ -113,7 +113,7 @@ app.get('/api/login', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
 });
 
-app.post('/api/api/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
