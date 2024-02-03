@@ -41,4 +41,4 @@ jobs:
             docker pull flamware/clundi_api:latest
             docker stop clundi_api || true
             docker rm clundi_api || true
-            docker run -d -p 3000:3000 clundi_api
+            docker run -d -p 3000:3000 --name clundi_api flamware/clundi_api:latest
