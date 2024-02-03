@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-// Set the base URL conditionally based on the protocol
-const baseURL = window.location.protocol === 'https:'
-    ? 'https://clundi.fr/api'  // Update with your actual domain and path
-    : 'http://localhost:3000';
+// Set the base URL globally for Axios
+axios.defaults.baseURL = 'https://clundi.fr/api';  // Update to your actual HTTPS URL
 
-// Create an Axios instance with the configured base URL
-const axiosInstance = axios.create({
-    baseURL,
+// Include credentials
+axios.defaults.withCredentials = true;
+
+// Ignore SSL verification (for development purposes only)
+axios.interceptors.request.use((config) => {
+    return config;
 });
 
-export default axiosInstance;
+export default axios;
