@@ -9,7 +9,11 @@ const portHTTPS = 8445; // HTTPS port
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
+const fs = require('fs');
+const privateKey = fs.readFileSync('../server-key.pem', 'utf8');
+const certificate = fs.readFileSync('../server-cert.pem', 'utf8');
 
+const credentials = { key: privateKey, cert: certificate };
 connectDatabase();
 app.use(session({
     secret: 'your-secret-key',
@@ -19,6 +23,7 @@ app.use(session({
 }));
 
 app.use(cors());
+
 
 app.use(express.json());
 app.use((req, res, next) => {
@@ -327,8 +332,11 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
 
 
 const httpServer = http.createServer(app);
-
+const httpsServer = require('https').createServer(credentials, app);
 httpServer.listen(portHTTP, () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
 });
 
+httpsServer.listen(portHTTPS, () => {
+    console.log(`HTTPS Server is running on port ${portHTTPS}`);
+});
