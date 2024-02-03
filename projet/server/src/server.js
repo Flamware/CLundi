@@ -103,8 +103,13 @@ app.get('/register', async (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'html', 'register.html'));
 });
 
+app.get('/login', async (req, res) => {
+    console.log('Login page requested');
+    //respond 200 OK
+    res.sendFile(path.join(__dirname, 'public', 'html', 'login.html'));
+});
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
     try {
         const { username, password } = req.body;
 
