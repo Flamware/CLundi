@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const session = require('express-session');
 const http = require('http');
+const https = require('https');
 const { client, connectDatabase } = require('./database.js'); // Import the database module
 const app = express();
 const portHTTP = 3000; // HTTP port
@@ -11,6 +12,9 @@ const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const fs = require('fs');
 
+const privateKey = fs.readFileSync('private-key.pem', 'utf8');
+const certificate = fs.readFileSync('server-cert.pem', 'utf8');
+const credentials = { key: privateKey, cert: certificate };
 const ip = require('ip');
 
 connectDatabase();
@@ -329,8 +333,15 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
     });
 });
 
+
 const httpServer = http.createServer(app);
-httpServer.listen(portHTTP, '0.0.0.0', () => {
+const httpsServer = https.createServer(credentials, app);
+httpServer.listen(portHTTP, () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
+    console.log(`Server IP: ${ip.address()}`); // Print the local IP address
+});
+httpsServer.listen(portHTTPS, () => {
+    console.log(`HTTPS Server is running on port ${portHTTPS}`);
+    console.log(`Server IP: ${ip.address()}`); // Print the local IP address
     console.log('Server is accessible externally');
 });
