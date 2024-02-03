@@ -27,7 +27,7 @@ jobs:
           docker tag flamware/clundi_vue:latest flamware/clundi_vue:latest
           docker push flamware/clundi_vue:latest
 
-      - name: SSH into VPS and update clundi_vue
+      - name: SSH into VPS and update clundi.fr
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}

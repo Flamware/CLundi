@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Set the base URL globally for Axios
-axios.defaults.baseURL = 'http://localhost:3000/api/';  // Update to your actual HTTPS URL
+axios.defaults.baseURL = 'https://clundi.fr/api/';  // Update to your actual HTTPS URL
 
 // Include credentials
 axios.defaults.withCredentials = true;
