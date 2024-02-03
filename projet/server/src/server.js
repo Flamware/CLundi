@@ -20,7 +20,6 @@ app.use(session({
     saveUninitialized: true,
     cookie: { maxAge: 3600000 } // 1 hour expiration time
 }));
-
 app.use(cors());
 
 
