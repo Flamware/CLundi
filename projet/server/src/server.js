@@ -329,12 +329,8 @@ app.delete('/delete-comment/:commentId', verifyToken, (req, res) => {
     });
 });
 
-
 const httpServer = http.createServer(app);
-
-
-
-httpServer.listen(portHTTP, () => {
+httpServer.listen(portHTTP, '0.0.0.0', () => {
     console.log(`HTTP Server is running on port ${portHTTP}`);
-    console.log(`Server IP: ${ip.address()}`); // Print the local IP address
+    console.log('Server is accessible externally');
 });
