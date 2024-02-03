@@ -1,13 +1,13 @@
-// axios-conf.js
 import axios from 'axios';
-import https from 'https';
 
-// Set the base URL globally for Axios
-axios.defaults.baseURL = 'http://87.106.121.11:3000';
+// Set the base URL conditionally based on the protocol
+const baseURL = window.location.protocol === 'https:'
+    ? 'https://clundi.fr/api'  // Update with your actual domain and path
+    : 'http://localhost:3000';
 
-// Ignore SSL verification (for development purposes only)
-axios.interceptors.request.use((config) => {
-    return config;
+// Create an Axios instance with the configured base URL
+const axiosInstance = axios.create({
+    baseURL,
 });
 
-export default axios;
+export default axiosInstance;
