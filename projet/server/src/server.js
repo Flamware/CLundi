@@ -11,10 +11,6 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const fs = require('fs');
-
-const privateKey = fs.readFileSync('./private-key.pem', 'utf8');
-const certificate = fs.readFileSync('./server-cert.pem', 'utf8');
-const credentials = { key: privateKey, cert: certificate };
 const ip = require('ip');
 
 connectDatabase();
