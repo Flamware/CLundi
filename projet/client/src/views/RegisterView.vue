@@ -61,7 +61,7 @@ export default {
             localStorage.setItem('token', token);
 
             // Redirect to home or another route
-            this.$router.push('/');
+            this.$router.push('/login');
           })
           .catch((error) => {
             console.error('Error creating account:', error);
