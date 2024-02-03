@@ -1,11 +1,10 @@
 import axios from 'axios';
 
 // Set the base URL globally for Axios
-axios.defaults.baseURL = 'https://172.27.232.146:3000/';
+axios.defaults.baseURL = 'https://87.106.121.11:8445';
 
 axios.interceptors.request.use((config) => {
-    // You can modify headers or perform other actions before the request is sent
-    // config.headers.common['Authorization'] = 'Bearer ' + getToken();
+    config.httpsAgent = new https.Agent({ rejectUnauthorized: false });
     return config;
 });
 

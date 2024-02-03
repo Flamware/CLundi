@@ -13,8 +13,9 @@ RUN npm install
 # Copy the rest of the application code to the container
 COPY . .
 
-# Expose the common port for API requests
+# Expose the ports for both HTTP and HTTPS
 EXPOSE 3000
+EXPOSE 8445
 
 # Command to run your application
 CMD ["node", "src/server.js"]
